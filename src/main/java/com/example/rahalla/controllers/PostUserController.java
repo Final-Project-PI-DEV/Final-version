@@ -208,7 +208,7 @@ public class PostUserController implements Initializable {
                         Button deleteCommentBtn = new Button("🗑️");
                         deleteCommentBtn.getStyleClass().add("comment-action-button");
                         deleteCommentBtn.setOnAction(e1 -> handleDeleteComment(comment, post));
-
+//new
                         commentBox.getChildren().addAll(commentLabel, dateLabel);
                         allCommentsBox.getChildren().add(commentBox);
                     });
