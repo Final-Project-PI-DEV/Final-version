@@ -1,0 +1,50 @@
+/* Empêche l'espace sous le footer */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Assure que le contenu prend tout l’espace avant le footer */
+.container {
+    flex: 1;
+}
+
+/* Swiper - Ajoute un espace entre les cartes et le footer */
+.swiper {
+    margin-bottom: 80px; /* Ajuste cette valeur selon ton affichage */
+}
+
+/* Si aucun événement, assure un bon espacement avant le footer */
+.no-events {
+    margin-bottom: 80px;
+}
+
+/* Footer */
+.footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    width: 100%;
+    padding: 40px 0;
+    margin-top: auto; /* Fait en sorte que le footer colle bien au bas */
+}
+
+/* Icônes de réseaux sociaux */
+.footer__socials {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.social-icon {
+    color: #fff;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+
+.social-icon:hover {
+    color: #FF883B;
+}

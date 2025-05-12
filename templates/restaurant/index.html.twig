@@ -1,0 +1,278 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Restaurant Dashboard
+{% endblock %}
+
+{% block body %}
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Campers Dashboard</title>
+			<link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+			<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+		</head>
+		<body>
+			<header>
+				<div class="logo" title="University Management System">
+					<img src="{{ asset('assets/images/logo.png') }}" alt="">
+				</div>
+				<div class="navbar">
+					<a href="index.html" onclick="timeTableAll()">
+						<span class="material-icons-sharp">home</span>
+						<h3>User</h3>
+					</a>
+					<a href="timetable.html" onclick="timeTableAll()">
+						<span class="material-icons-sharp">event_available</span>
+						<h3>RESERVATION</h3>
+					</a>
+					<a href="/restaurant" class="active">
+						<span class="material-icons-sharp">restaurant</span>
+						<h3>RESTAURANTS</h3>
+					</a>
+					<a href="/menu">
+						<span class="material-icons-sharp">menu</span>
+						<h3>MENU</h3>
+					</a>
+					<a href="#">
+						<span class="material-icons-sharp">logout</span>
+						<h3>Logout</h3>
+					</a>
+				</div>
+				<div id="profile-btn">
+					<span class="material-icons-sharp">person</span>
+				</div>
+				<div class="theme-toggler">
+					<span class="material-icons-sharp active">light_mode</span>
+					<span class="material-icons-sharp">dark_mode</span>
+				</div>
+
+			</header>
+			<div class="container">
+				<aside>
+					<div class="profile">
+						<div class="top">
+							<div class="profile-photo">
+								<img src="{{ asset('assets/images/profile-1.jpg') }}" alt="">
+							</div>
+							<div class="info">
+								<p>Hey,
+									<b>Alex</b>
+								</p>
+								<small class="text-muted">12102030</small>
+							</div>
+						</div>
+						<div class="about">
+							<h5>Membership Level</h5>
+							<p>Premium Camper</p>
+							<h5>Birthday</h5>
+							<p>29-Feb-2020</p>
+							<h5>Contact</h5>
+							<p>1234567890</p>
+							<h5>Email</h5>
+							<p>alex@campers.com</p>
+							<h5>Address</h5>
+							<p>Sunny Campsite, Pine Valley, USA</p>
+						</div>
+					</div>
+				</aside>
+				<main>
+					<h1>Gestion Restaurants</h1>
+					<div class="table-wrapper">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Nom_resto</th>
+									<th>Specialite</th>
+									<th>Email</th>
+									<th>Date_debut_colab</th>
+									<th>Date_fin_colab</th>
+									<th>Statut</th>
+									<th>Rate</th>
+									<th>Image</th>
+									<th>actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for restaurant in restaurants %}
+									<tr>
+										<td>{{ restaurant.id }}</td>
+										<td>{{ restaurant.nomResto }}</td>
+										<td>{{ restaurant.specialite }}</td>
+										<td>{{ restaurant.email }}</td>
+										<td>{{ restaurant.dateDebutColab ? restaurant.dateDebutColab|date('Y-m-d') : '' }}</td>
+										<td>{{ restaurant.dateFinColab ? restaurant.dateFinColab|date('Y-m-d') : '' }}</td>
+										<td>{{ restaurant.statut }}</td>
+										<td>{{ restaurant.ratingCount }}</td>
+										<td>{{ restaurant.image }}</td>
+										<td>
+											<a href="{{ path('app_restaurant_show', {'id': restaurant.id}) }}">show</a>
+											<a href="{{ path('app_restaurant_edit', {'id': restaurant.id}) }}">edit</a>
+											<a href="{{ path('app_restaurant_map', {'id': restaurant.id}) }}">Maps</a>
+
+
+											{% if restaurant.statut == 'inactif' %}
+												<a href="{{ path('app_restaurant_send_email', {'id': restaurant.id}) }}" class="btn btn-warning">
+													Envoyer Mail
+												</a>
+											{% endif %}
+										</td>
+									</tr>
+								{% else %}
+									<tr>
+										<td colspan="10">no records found</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<a href="{{ path('app_restaurant_new') }}">Create new</a>
+					<div>
+						<a href="{{ path('app_restaurant_best') }}">Voir les scores/predictions</a>
+					</div>
+					<div>
+						<a href="{{ path('app_restaurant_mes_commandes') }}">Voir mes commandes</a>
+					</div>
+				</main>
+
+				<style>
+					/* Importation de la police */
+					@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');:root {
+						--primary-color: #2C3E50;
+						--secondary-color: #34495E;
+						--accent-color: #18BC9C;
+						--danger-color: #E74C3C;
+						--text-color: #ffffff;
+						--bg-light: #ECF0F1;
+						--bg-dark: #222;
+					}
+
+					* {
+						margin: 0;
+						padding: 0;
+						box-sizing: border-box;
+						font-family: 'Inter', sans-serif;
+					}
+
+
+					body {
+						background-color: var(--bg-light);
+						color: var(--primary-color);
+						padding: 20px;
+					}
+
+					h1 {
+						color: var(--primary-color);
+						margin-bottom: 20px;
+					}
+
+					/* Table */
+					.table {
+						width: 100%;
+						border-collapse: collapse;
+						background: #fff;
+						box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+						border-radius: 8px;
+						overflow: hidden;
+					}
+
+					.table th,
+					.table td {
+						padding: 12px;
+						border-bottom: 1px solid #ddd;
+						text-align: left;
+					}
+
+					.table th {
+						background-color: var(--primary-color);
+						color: var(--text-color);
+						text-transform: uppercase;
+					}
+
+					.table tr:hover {
+						background-color: #f5f5f5;
+					}
+
+					/* Liens d'actions */
+					a {
+						text-decoration: none;
+						color: var(--accent-color);
+						font-weight: 600;
+					}
+
+					a:hover {
+						color: var(--secondary-color);
+					}
+
+					/* Boutons */
+					.btn {
+						display: inline-block;
+						padding: 10px 15px;
+						background: var(--accent-color);
+						color: white;
+						border: none;
+						border-radius: 5px;
+						text-align: center;
+						font-size: 14px;
+						cursor: pointer;
+						transition: background 0.3s ease;
+					}
+
+					.btn:hover {
+						background: var(--secondary-color);
+					}
+
+					.btn-danger {
+						background: var(--danger-color);
+					}
+
+					.btn-danger:hover {
+						background: #c0392b;
+					}
+					/* Bouton "Envoyer Mail" spécifique */
+					.btn-warning {
+						padding: 5px 10px; /* Réduire l'espace interne du bouton */
+						font-size: 12px; /* Réduire la taille de la police */
+						border-radius: 3px; /* Réduire les coins arrondis */
+					}
+
+
+					/* Formulaires */
+					form {
+						background: #fff;
+						padding: 20px;
+						border-radius: 8px;
+						box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+						max-width: 500px;
+						margin: auto;
+					}
+
+					input,
+					select,
+					textarea {
+						width: 100%;
+						padding: 10px;
+						margin: 10px 0;
+						border: 1px solid #ccc;
+						border-radius: 5px;
+					}
+
+					button {
+						width: 100%;
+					}
+
+					/* Liens de navigation */
+					.nav-links {
+						margin-top: 20px;
+					}
+
+					.nav-links a {
+						display: inline-block;
+						margin-right: 15px;
+						font-weight: bold;
+					}
+				</style>
+			{% endblock %}

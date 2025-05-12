@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_events_delete', {'id': events.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet événement ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ events.id) }}">
+    <button class="btn btn-danger">
+        <i class="fas fa-trash me-2"></i>Supprimer
+    </button>
+</form>

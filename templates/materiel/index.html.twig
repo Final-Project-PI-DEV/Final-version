@@ -1,0 +1,236 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réserver matériel{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block body %}
+{{include('reclamation/index1.html.twig')}}
+<style>
+    :root {
+        --primary-color: #FF883B;
+        --hover-color: rgb(202, 83, 4);
+        --background-color: #f8f9fa;
+        --card-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        background: var(--background-color);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+        padding: 2rem 0;
+        margin-bottom: 3rem;
+        color: white;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .header-section h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-transform: capitalize;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .search-group {
+        max-width: 500px;
+        margin: 1.5rem auto;
+        position: relative;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 1rem 1.5rem 1rem 3rem;
+        border: none;
+        border-radius: 50px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    .search-input:focus {
+        outline: none;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+    }
+
+    .cards-wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .material-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .material-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+
+    .card-image {
+        height: 250px;
+        width: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+
+    .material-card:hover .card-image {
+        transform: scale(1.05);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .badge-availability {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 136, 59, 0.1);
+        color: var(--primary-color);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 600;
+        backdrop-filter: blur(5px);
+    }
+
+    .price-tag {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .price-tag::before {
+        content: 'TND';
+        font-size: 1rem;
+        opacity: 0.8;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-custom {
+        flex: 1;
+        padding: 0.8rem 1.5rem;
+        background: var(--primary-color);
+        color: white !important;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        text-align: center;
+        transition: var(--transition);
+        border: 2px solid var(--primary-color);
+    }
+
+    .btn-custom:hover {
+        background: var(--hover-color);
+        border-color: var(--hover-color);
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+    }
+
+    .no-items {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem;
+        background: white;
+        border-radius: 20px;
+        box-shadow: var(--card-shadow);
+    }
+</style>
+
+<div class="header-section">
+    <div class="container">
+        <h1>📦 Matériel disponible</h1>
+        <div class="search-group">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+                type="search" 
+                class="search-input" 
+                placeholder="Rechercher du matériel..."
+                name="searchbar"
+                aria-label="Recherche de matériel"
+            >
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ path('app_materiel_new') }}" class="btn btn-custom">
+                <i class="bi bi-plus-circle me-2"></i>
+                Nouveau matériel
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {% if materiels is empty %}
+        <div class="no-items">
+            <h2 class="h4 mb-3">Aucun matériel disponible</h2>
+            <p>Commencez par ajouter du nouveau matériel</p>
+        </div>
+    {% else %}
+        <div class="cards-wrapper">
+            {% for materiel in materiels %}
+                <div class="material-card">
+                    <img 
+                        src="{{ materiel.imagePath ? asset('uploads/images/' ~ materiel.imagePath) : asset('images/default-material.jpg') }}" 
+                        class="card-image" 
+                        alt="{{ materiel.name }}"
+                        loading="lazy"
+                    >
+                    <div class="card-body">
+                        <span class="badge-availability">
+                            {{ materiel.quantityAvailable }}/{{ materiel.quantity }} disponibles
+                        </span>
+                        <h3 class="h5 mb-2">{{ materiel.name }}</h3>
+                        <p class="text-muted mb-3">
+                            {{ materiel.description ? materiel.description|slice(0, 80) ~ '...' : 'Aucune description' }}
+                        </p>
+                        <div class="price-tag">{{ materiel.price|number_format(2, ',', ' ') }}</div>
+                        <div class="btn-group">
+                            <a href="{{ path('app_materiel_show', {'id': materiel.id}) }}" class="btn-custom">
+                                Détails
+                            </a>
+                            <a href="{{ path('app_materiel_edit', {'id': materiel.id}) }}" class="btn-custom">
+                                Modifier
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

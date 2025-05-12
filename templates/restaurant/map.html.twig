@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map { height: 500px; }
+    </style>
+</head>
+<body>
+    <h1>Carte du Restaurant</h1>
+    <div id="map"></div>
+
+    <script>
+        // Initialiser la carte
+        const map = L.map('map').setView([48.8566, 2.3522], 12); // Paris par défaut
+
+        // Ajouter une couche de tuiles OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Adresse du restaurant passée depuis le contrôleur
+        const adresse = "{{ adresse|e('js') }}"; // Échapper l'adresse pour JavaScript
+
+        // Utiliser un service de géocodage tiers (Nominatim)
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adresse)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Affiche la réponse de l'API
+                if (data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(adresse)
+                        .openPopup();
+                    map.setView([lat, lon], 15); // Centrer la carte sur le restaurant
+                } else {
+                    console.error("Adresse non trouvée : " + adresse);
+                }
+            })
+            .catch(error => console.error("Erreur de géocodage : ", error));
+    </script>
+</body>
+</html>

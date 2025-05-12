@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block body %}
+    <h1>Validation de la commande</h1>
+    
+    <div class="panier-summary">
+        {% for item in panier %}
+            <div class="panier-item">
+                <h3>{{ item.nom }}</h3>
+                <p>Quantité: {{ item.quantite }}</p>
+                <p>Prix unitaire: {{ item.prix|format_currency('EUR') }}</p>
+            </div>
+        {% endfor %}
+        
+        <div class="total">
+            <h3>Total: {{ total|format_currency('EUR') }}</h3>
+        </div>
+    </div>
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            <label for="card-number">Numéro de carte</label>
+            <input type="text" id="card-number" name="card-number" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="expiry-date">Date d'expiration</label>
+            <input type="text" id="expiry-date" name="expiry-date" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="cvc">CVC</label>
+            <input type="text" id="cvc" name="cvc" required class="form-control">
+        </div>
+
+    
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('payment-process') }}">
+
+        <button type="submit" class="btn btn-success">Confirmer le paiement</button>
+    {{ form_end(form) }}
+{% endblock %}

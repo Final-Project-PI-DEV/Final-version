@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Message</title>
+		<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+		<style>
+			body {
+				background: url('/assets/images/camping3.jpg') no-repeat center center fixed;
+				background-size: cover;
+				min-height: 100vh;
+				margin: 0;
+				padding: 0;
+			}
+
+			.message-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				padding: 20px;
+			}
+
+			.message-box {
+				background: rgba(0, 0, 0, 0.7);
+				color: white;
+				padding: 30px 50px;
+				border-radius: 10px;
+				text-align: center;
+				font-size: 2rem;
+				animation: fadeIn 0.5s ease-out;
+				max-width: 90%;
+				margin: 0 auto;
+			}
+
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+					transform: translateY(-20px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.header {
+				background: rgba(0, 0, 0, 0.8);
+				transition: top 0.3s ease-in-out;
+			}
+
+			.navmenu ul {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				display: flex;
+				gap: 20px;
+			}
+
+			.navmenu a {
+				color: white;
+				text-decoration: none;
+				padding: 10px 15px;
+				transition: color 0.3s ease;
+			}
+
+			.navmenu a:hover {
+				color: #ff7b00;
+			}
+
+			.btn-getstarted {
+				background-color: #ff7b00;
+				color: white;
+				padding: 10px 20px;
+				border-radius: 5px;
+				text-decoration: none;
+				transition: background-color 0.3s ease;
+			}
+
+			.btn-getstarted:hover {
+				background-color: #e66f00;
+				color: white;
+			}
+
+			.logo-img {
+				height: 50px;
+				width: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<header id="header" class="header d-flex align-items-center fixed-top">
+			<div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+				<a href="{{ path('create-reclamation') }}" class="logo d-flex align-items-center me-auto me-lg-0">
+					<img src="{{ asset('assets/images/logorz1.png') }}" class="logo-img" alt="Logo">
+				</a>
+				<nav id="navmenu" class="navmenu">
+					<ul>
+						<li><a href="#hero" class="active">Home</a></li>
+						<li><a href="#about">About</a></li>
+						<li><a href="#camping-offers">Services</a></li>
+						<li><a href="#footer">Contact</a></li>
+						<li><a href="#footer">Matériels</a></li>
+						<li><a href="#footer">Loisirs</a></li>
+					</ul>
+				</nav>
+				<a class="btn-getstarted" href="{{ path('create-reclamation') }}">Get Started</a>
+			</div>
+		</header>
+
+		<div class="message-container">
+			{% for message in app.flashes('message') %}
+				<div class="message-box">
+					{{ message }}
+				</div>
+			{% endfor %}
+		</div>
+
+		<script>
+			let lastScrollTop = 0;
+const header = document.getElementById('header');
+
+window.addEventListener('scroll', function () {
+const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+header.style.top = scrollTop > lastScrollTop ? "-100px" : "0";
+lastScrollTop = scrollTop;
+});
+
+// Auto-hide message after 3 seconds
+		</script>
+
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	</body>
+</html>

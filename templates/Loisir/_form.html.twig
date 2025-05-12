@@ -1,0 +1,32 @@
+{{ form_start(form) }}
+
+{% if form.vars.errors|length > 0 %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for error in form.vars.errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% for child in form.children %}
+    <div class="form-row">
+        {{ form_widget(child, {'attr': {'class': 'form-input', 'placeholder': ' '}}) }}
+        {{ form_label(child, null, {'label_attr': {'class': 'form-label'}}) }}
+        
+        {% if child.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for error in child.vars.errors %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+{{ form_end(form) }}

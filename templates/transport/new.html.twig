@@ -1,0 +1,199 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Transport{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/cssaziz/header.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/cssaziz/formevents.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/cssaziz/formtransport.css') }}">
+    <style>
+        :root {
+            --primary-color: #ff8c00; /* 🎨 Orange */
+            --dark-color: #cc7000;
+        }
+
+        /* ✅ RENDRE LE HEADER BIEN VISIBLE */
+        .form-card {
+            max-width: 800px; /* 🔹 Largeur contrôlée */
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 85vh; /* 🔹 Hauteur adaptée pour voir tout le formulaire */
+        }
+
+        .form-header {
+            background: linear-gradient(45deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* ✅ ACTIVATION DU SCROLL SI LE CONTENU EST LONG */
+        .form-body {
+            flex: 1;
+            overflow-y: auto; /* 🔹 Permet de scroller si le formulaire est long */
+            padding: 2rem;
+        }
+
+        /* ✅ AUGMENTATION DES CHAMPS */
+        .form-group {
+            margin-bottom: 1.8rem; /* 🔹 Espacement augmenté */
+        }
+
+        .form-control {
+            padding: 1rem; /* 🔹 Champs plus spacieux */
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+        }
+
+        /* ✅ BOUTON À DROITE */
+        .btn-container {
+            display: flex;
+            justify-content: flex-end; /* 🔹 Aligné à droite */
+            padding-top: 1rem;
+        }
+
+        /* ✅ STYLE DU BOUTON */
+        .btn-submit {
+            background: linear-gradient(45deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-submit i {
+            margin-right: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(204, 112, 0, 0.3);
+        }
+
+        /* ✅ RÉGLAGE DU RESPONSIVE */
+        @media (max-width: 768px) {
+            .form-card {
+                width: 90%;
+                height: auto;
+                margin: 1rem auto;
+            }
+
+            .form-body {
+                padding: 1.5rem;
+            }
+
+            .btn-container {
+                justify-content: center; /* 🔹 Centrer sur mobile */
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="form-card">
+        <div class="form-header">
+            Créer un nouveau transport
+        </div>
+
+        <div class="form-body">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form_label(form.typetransport, 'Type de Transport') }}
+                            {{ form_widget(form.typetransport, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.typetransport) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.heure_depart) }}
+                            {{ form_widget(form.heure_depart, {'attr': {
+                                'class': 'form-control flatpickr',
+                                'data-enable-time': 'true'
+                            }}) }}
+                            {{ form_errors(form.heure_depart) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.heureArrive) }}
+                            {{ form_widget(form.heureArrive, {'attr': {
+                                'class': 'form-control flatpickr',
+                                'data-enable-time': 'true'
+                            }}) }}
+                            {{ form_errors(form.heureArrive) }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form_label(form.nbreescale) }}
+                            {{ form_widget(form.nbreescale, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.nbreescale) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.nbreplace) }}
+                            {{ form_widget(form.nbreplace, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.nbreplace) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.matricule) }}
+                            {{ form_widget(form.matricule, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.matricule) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.events, 'Événement associé') }}
+                            {{ form_widget(form.events, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.events) }}
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            {{ form_label(form.description) }}
+                            {{ form_widget(form.description, {'attr': { 'class': 'form-control', }}) }}
+                            {{ form_errors(form.description) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ path('dashboard') }}" class="back-link">
+                        <i class="fas fa-arrow-left"></i>
+                        Retour à la liste
+                    </a>
+                    
+                    <!-- ✅ BOUTON ENREGISTRER ALIGNÉ À DROITE -->
+                    <div class="btn-container">
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-save"></i>
+                            {{ button_label|default('Enregistrer') }}
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

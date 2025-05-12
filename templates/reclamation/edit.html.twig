@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la réclamation
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Modifier la réclamation</h1>
+
+		{{ form_start(form) }}
+		<div class="mb-3">
+			{{ form_row(form.title, {'attr': {'class': 'form-control'}}) }}
+		</div>
+		<div class="mb-3">
+			{{ form_row(form.objet, {'attr': {'class': 'form-control'}}) }}
+		</div>
+		<div class="mb-3">
+			{{ form_row(form.description, {'attr': {'class': 'form-control'}}) }}
+		</div>
+		<button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+		<a href="{{ path('user-liste') }}" class="btn btn-secondary">Retour à la liste</a>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

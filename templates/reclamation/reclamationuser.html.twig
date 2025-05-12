@@ -1,0 +1,242 @@
+<title class:"titre">Mes Réclamations</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/contact.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<style>
+		body {
+			background: url('/assets/images/camping12.jpg') no-repeat center center fixed;
+			background-size: cover;
+			padding: 20px;
+			font-family: 'Poppins', sans-serif;
+		}
+		.table-container {
+			background: rgba(255, 255, 255, 0.95);
+			padding: 30px;
+			border-radius: 15px;
+			margin-top: 30px;
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+			width: 100vw; /* Prend toute la largeur de l'écran */
+			max-width: none; /* Supprime toute limitation de largeur */
+			overflow-x: auto; /* Permet de faire défiler horizontalement si nécessaire */
+			margin-left: 0; /* Colle le conteneur à gauche */
+		}
+		.table-responsive {
+			width: 100%;
+			margin-left: 0; /* Colle la table à gauche */
+			margin-right: auto; /* Empêche la table de se centrer */
+		}
+		.table {
+			margin-left: 0; /* Aligner complètement à gauche */
+			margin-right: auto; /* Empêcher le centrage */
+			width: 100%; /* S'assurer que la table prend toute la largeur disponible */
+		}
+		.table thead th {
+			background-color: #4a90e2;
+			color: white;
+			font-weight: 600;
+			text-transform: uppercase;
+			font-size: 0.9em;
+			padding: 15px;
+			vertical-align: middle;
+		}
+		.table tbody td {
+			padding: 15px;
+			vertical-align: middle;
+		}
+		.table tbody tr:hover {
+			background-color: rgba(74, 144, 226, 0.05);
+		}
+		.status-encours,
+		.status-resolue,
+		.status-attente {
+			border-radius: 20px;
+			padding: 8px 15px;
+			font-size: 0.9em;
+			border: none;
+		}
+		.status-encours {
+			background-color: #ffd54f !important;
+			color: #000 !important;
+		}
+		.status-resolue {
+			background-color: #4caf50 !important;
+			color: white !important;
+		}
+		.status-attente {
+			background-color: #f44336 !important;
+			color: white !important;
+		}
+		.text-center {
+			font-size: 70px; /* Taille de la police */
+			font-weight: bold; /* Mettre en gras */
+			color: #ff7b00; /* Couleur du texte (gris foncé) */
+			text-align: center; /* Centrer le texte */
+			margin-top: 20px; /* Espace au-dessus du titre */
+			margin-bottom: 20px; /* Espace en-dessous du titre */
+			font-family: 'Arial', sans-serif; /* Police sans-serif */
+		}
+		.response-content {
+			max-width: 300px; /* Réduit la largeur du champ description */
+			word-wrap: break-word; /* Permet le passage à la ligne */
+			white-space: normal; /* Gère le texte sur plusieurs lignes */
+
+		}
+		.description-cell {
+			max-width: 300px; /* Réduit la largeur du champ description */
+			word-wrap: break-word; /* Permet le passage à la ligne */
+			white-space: normal; /* Gère le texte sur plusieurs lignes */
+		}
+		.title-cell {
+			max-width: 150px; /* Réduit la largeur du champ description */
+			word-wrap: break-word; /* Permet le passage à la ligne */
+			white-space: normal; /* Gère le texte sur plusieurs lignes */
+		}
+		section1 {
+			display: block; /* Assure que les sections prennent toute la largeur */
+			height: 50px; /* Définit une hauteur pour voir l'espace */
+			margin-bottom: 20px; /* Ajoute un espace entre les sections */
+			background-color: rgba(255, 255, 255, 0); /* Pour visualiser les sections (facultatif) */
+		}
+	</style>
+
+{% endblock %}
+
+<body>
+	{{include('reclamation/index1.html.twig')}}
+	
+
+	<script>
+		let lastScrollTop = 0;
+const header = document.getElementById('header');
+
+window.addEventListener('scroll', function () {
+const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+if (scrollTop > lastScrollTop) {
+header.style.top = "-100px";
+} else {
+header.style.top = "0";
+} lastScrollTop = scrollTop;
+});
+	</script>
+
+	<div class="container mt-5">
+		<h2 class="text-center mb-4">Mes Réclamations</h2>
+
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		{% for message in app.flashes('error') %}
+			<div class="alert alert-danger">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		<div class="mb-4">
+			<a href="{{ path('create-reclamation') }}" class="btn btn-success">
+				<i class="fas fa-plus me-2"></i>Ajouter une réclamation
+			</a>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>
+							<i class="fas fa-heading me-2"></i>Titre</th>
+						<th>
+							<i class="fas fa-tag me-2"></i>Objet</th>
+						<th>
+							<i class="fas fa-calendar-alt me-2"></i>Date</th>
+						<th>
+							<i class="fas fa-align-left me-2"></i>Description</th>
+						<th>
+							<i class="fas fa-reply me-2"></i>Réponse</th>
+						<th>
+							<i class="fas fa-info-circle me-2"></i>Statut</th>
+						<th>
+							<i class="fas fa-comments me-2"></i>Conversation</th>
+						<th>
+							<i class="fa-solid fa-pen-to-square me-2"></i>Actions</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					{% for reclamation in reclamations %}
+						<tr>
+							<td class="title-cell" title="{{ reclamation.title }}">{{ reclamation.title }}</td>
+							<td>{{ reclamation.objet }}</td>
+							<td>{{ reclamation.dateReclamation|date('d/m/Y H:i') }}</td>
+							<td class="description-cell" title="{{ reclamation.description }}">{{ reclamation.description }}</td>
+							<td>
+								{% if reclamation.reponse %}
+									<div class="response-content">
+										{{ reclamation.reponse.textReponse }}
+										<br>
+										<small class="text-muted">
+											<i class="far fa-clock me-1"></i>
+											Répondu le
+											{{ reclamation.reponse.dateReponse|date('d/m/Y H:i') }}
+										</small>
+									</div>
+								{% else %}
+									<span class="text-muted">
+										<i class="fas fa-hourglass-half me-1"></i>
+										Pas encore de réponse
+									</span>
+								{% endif %}
+							</td>
+							<td>
+								<span class="badge {% if reclamation.statut == 'en attente' %}status-attente{% elseif reclamation.statut == 'résolue' %}status-resolue{% else %}status-encours{% endif %}">
+									{{ reclamation.statut }}
+								</span>
+							</td>
+							<td>
+								{% if reclamation.statut == 'en attente' %}
+									<a href="{{ path('conversation', {'id': reclamation.id}) }}" class="btn btn-info">
+										<i class="fas fa-comments"></i>
+										Ouvrir Conversation
+									</a>
+								{% endif %}
+							</td>
+							<td>
+								{% if reclamation.statut == 'En cours' %}
+									<a href="{{ path('edit_reclamation', {'id': reclamation.id}) }}" class="btn btn-warning">
+										<i class="fas fa-edit"></i>
+										Modifier
+									</a>
+								{% endif %}
+								{% if reclamation.statut == 'résolue' %}
+									{% set hasAvis = false %}
+									{% for avis in reclamation.avisClients %}
+										{% set hasAvis = true %}
+									{% endfor %}
+
+									{% if not hasAvis %}
+										<a href="{{ path('app_avis_client', {'id': reclamation.id}) }}" class="btn btn-info">
+											<i class="fas fa-comment"></i>
+											Donner mon avis
+										</a>
+									{% else %}
+										<span class="text-muted">
+											<i class="fas fa-check"></i>
+											Avis déjà donné
+										</span>
+									{% endif %}
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body></html>

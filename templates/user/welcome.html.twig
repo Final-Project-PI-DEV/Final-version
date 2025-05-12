@@ -1,0 +1,20 @@
+{# templates/emails/welcome.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bienvenue</title>
+</head>
+<body>
+    <h1>Bienvenue {{ user.prenom }} !</h1>
+    
+    <p>Merci de vous être inscrit(e) sur notre plateforme le {{ date_inscription|date('d/m/Y') }}.</p>
+    
+    <p>Voici quelques informations sur votre compte :</p>
+    <ul>
+        <li>Nom d'utilisateur : {{ user.email }}</li>
+        <li>Date de naissance : {{ user.dateDeNaissance|date('d/m/Y') }}</li>
+    </ul>
+    
+    <p>Nous vous souhaitons une excellente expérience sur notre site.</p>
+</body>
+</html>

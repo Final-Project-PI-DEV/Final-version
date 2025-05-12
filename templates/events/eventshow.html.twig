@@ -1,0 +1,456 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles généraux */
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            color: #2a2d50;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* En-tête de l'événement */
+        .event-header {
+            background: linear-gradient(135deg, #69c6bc, #4a90e2);
+            padding: 4rem 0;
+            text-align: center;
+            color: white;
+            border-radius: 15px 15px 0 0;
+            margin-bottom: 2rem;
+        }
+
+        .event-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .badge-custom {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        /* Image de l'événement */
+        .event-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .event-image-placeholder {
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            height: 400px;
+            color: #6c757d;
+            font-size: 2rem;
+        }
+
+        /* Sections de détails */
+        .detail-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .detail-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2a2d50;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .detail-item .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            margin-right: 1rem;
+        }
+
+        .detail-item .icon-box.bg-primary { background: #69c6bc; }
+        .detail-item .icon-box.bg-success { background: #4a90e2; }
+        .detail-item .icon-box.bg-warning { background: #ff6b6b; }
+        .detail-item .icon-box.bg-info { background: #ffc107; }
+
+        .detail-item h6 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-item p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #2a2d50;
+            margin-bottom: 0;
+        }
+
+        /* Section transport */
+        .transport-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .transport-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2a2d50;
+            margin-bottom: 1.5rem;
+        }
+
+        .transport-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .transport-header {
+            background: linear-gradient(135deg, #69c6bc, #4a90e2);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .transport-icon {
+            font-size: 2rem;
+        }
+
+        .transport-title h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .transport-title small {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .transport-timeline {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .timeline-point {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-point:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-icon {
+            font-size: 1.5rem;
+            color: #69c6bc;
+        }
+
+        .timeline-content small {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .timeline-content p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #2a2d50;
+            margin-bottom: 0;
+        }
+
+        .transport-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            color: #69c6bc;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2a2d50;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item small {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .transport-description {
+            padding: 1.5rem;
+            font-size: 0.95rem;
+            color: #6c757d;
+        }
+
+        .no-transport {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+
+        .no-transport i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Boutons d'action */
+        .btn-action {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-action.back {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+
+        /* Nouveau style pour le bouton Réserver */
+        .btn-reserve {
+            background: linear-gradient(135deg, #2ecc71, #e67e22);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-reserve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+{{include('reclamation/index1.html.twig')}}
+    <div class="event-header">
+        <div class="container">
+            <h1>{{ events.titre }}</h1>
+            <div class="badge-custom">{{ events.typeevent }}</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                {% if events.image %}
+                    <img src="{{ asset('uploads/images/' ~ events.image) }}" class="event-image" alt="{{ events.titre }}">
+                {% else %}
+                    <div class="event-image-placeholder">
+                        <i class="fas fa-image"></i>
+                    </div>
+                {% endif %}
+
+                <div class="detail-section">
+                    <h2>Description</h2>
+                    <p>{{ events.description }}</p>
+                </div>
+
+                <div class="detail-section">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="icon-box bg-primary">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div>
+                                    <h6>Date de début</h6>
+                                    <p>{{ events.dateDebut|date('d M Y H:i') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="icon-box bg-success">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div>
+                                    <h6>Date de fin</h6>
+                                    <p>{{ events.dateFin|date('d M Y H:i') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="icon-box bg-warning">
+                                    <i class="fas fa-tag"></i>
+                                </div>
+                                <div>
+                                    <h6>Prix</h6>
+                                    <p>{{ events.prix }} DT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="icon-box bg-info">
+                                    <i class="fas fa-film"></i>
+                                </div>
+                                <div>
+                                    <h6>Film</h6>
+                                    <p>{{ events.film }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="transport-section">
+                    <h3>Informations de transport 🚌</h3>
+                    {% if events.transport %}
+                        <div class="transport-card">
+                            <div class="transport-header">
+                                <div class="transport-icon">
+                                    🚌
+                                </div>
+                                <div class="transport-title">
+                                    <h4>{{ events.transport.typetransport }}</h4>
+                                    <small>Matricule : {{ events.transport.matricule }}</small>
+                                </div>
+                            </div>
+                            <div class="transport-timeline">
+                                <div class="timeline-point">
+                                    <div class="timeline-icon">
+                                        🕒
+                                    </div>
+                                    <div class="timeline-content">
+                                        <small>Départ</small>
+                                        <p>{{ events.transport.heureDepart|date('H:i') }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-point">
+                                    <div class="timeline-icon">
+                                        🕒
+                                    </div>
+                                    <div class="timeline-content">
+                                        <small>Arrivée</small>
+                                        <p>{{ events.transport.heureArrive|date('H:i') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="transport-stats">
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        👥
+                                    </div>
+                                    <div class="stat-content">
+                                        <p>{{ events.transport.nbreplace }}</p>
+                                        <small>Places</small>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        🏁
+                                    </div>
+                                    <div class="stat-content">
+                                        <p>{{ events.transport.nbreescale }}</p>
+                                        <small>Escales</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="transport-description">
+                                <p>{{ events.transport.description }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="no-transport">
+                            🚫
+                            <p>Aucun transport associé à cet événement</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mt-5">
+            <a href="{{ path('app_yassine_index') }}" class="btn-action back">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+            <a href="{{ path('app_event_reserve', {'id': events.id}) }}" 
+               class="btn-reserve"
+               onclick="return confirm('Voulez-vous réserver cet événement ?')">
+                <i class="fas fa-bookmark"></i> Réserver
+            </a>
+        </div>
+
+        <!-- Modal de suppression -->
+        
+    </div>
+        
+{% endblock %}

@@ -1,0 +1,264 @@
+{% block title %}Avis Client
+{% endblock %}
+
+{% block stylesheets %}
+	<!-- Liens vers les fichiers CSS externes -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="{{ asset('assets/css/contact.css') }}">
+	<link
+	rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
+	<!-- Styles personnalisés -->
+	<style>
+		/* Styles généraux */
+		body {
+			background: url('/assets/images/camping3.jpg') no-repeat center center fixed;
+			background-size: cover;
+			padding: 20px;
+			font-family: 'Poppins', sans-serif;
+		}
+
+		.text-center {
+			font-size: 70px;
+			font-weight: bold;
+			color: #ff7b00;
+			text-align: center;
+			margin-top: 20px;
+			margin-bottom: 20px;
+			font-family: 'Arial', sans-serif;
+		}
+
+		.title-cell {
+			max-width: 150px;
+			word-wrap: break-word;
+			white-space: normal;
+		}
+
+		section1 {
+			display: block;
+			height: 50px;
+			margin-bottom: 20px;
+			background-color: rgba(255, 255, 255, 0);
+		}
+
+		/* Styles pour le chatbot */
+		.chatbot-container {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			background-color: white;
+		}
+
+		.chat-messages {
+			min-height: 300px;
+			margin-bottom: 20px;
+			overflow-y: auto;
+		}
+
+		.message {
+			margin-bottom: 15px;
+			padding: 10px 15px;
+			border-radius: 10px;
+		}
+
+		.bot-message {
+			background-color: #64beba; /* Suppression du fond gris */
+			margin-right: 20%;
+			color: #333; /* Couleur du texte */
+		}
+
+		.user-message {
+			background-color: rgb(255, 119, 0);
+			color: white;
+			margin-left: 20%;
+		}
+
+		/* Boutons */
+		.response-buttons {
+			display: flex;
+			justify-content: space-between; /* Boutons disjoints */
+			gap: 20px; /* Espace entre les boutons */
+		}
+
+		.btn-success,
+		.btn-danger {
+			flex: 1; /* Les boutons prennent la même largeur */
+			padding: 10px 20px;
+			font-size: 16px;
+			border-radius: 5px;
+			transition: all 0.3s ease;
+		}
+
+		.btn-success {
+			background-color: #28a745;
+			border-color: #28a745;
+		}
+
+		.btn-danger {
+			background-color: #dc3545;
+			border-color: #dc3545;
+		}
+
+		.btn-success:hover,
+		.btn-danger:hover {
+			opacity: 0.9;
+			transform: translateY(-2px); /* Effet de survol */
+		}
+
+		/* Overlay pour l'image de fond */
+		.overlay {
+			padding: 20px;
+			background-color: rgba(255, 255, 255, 0.21);
+			min-height: 100vh;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+{{include('reclamation/index1.html.twig')}}
+	<!-- Section 1 (vide pour l'instant) -->
+	<section1></section1>
+
+	<!-- Header -->
+	<header id="header" class="header d-flex align-items-center fixed-top">
+		<div
+			class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+			<!-- Logo -->
+			<a href="{{ path('create-reclamation') }}" class="logo d-flex align-items-center me-auto me-lg-0">
+				<img src="{{ asset('assets/images/logorz1.png') }}" class="logo-img">
+			</a>
+
+			<!-- Navigation -->
+			<nav id="navmenu" class="navmenu">
+				<ul>
+					<li><a href="#hero" class="active">Home</a></li>
+					<li><a href="#about">About</a></li>
+					<li><a href="#camping-offers">Services</a></li>
+					<li><a href="#footer">Contact</a></li>
+					<li><a href="#footer">Matériels</a></li>
+					<li><a href="#footer">Loisirs</a></li>
+				</ul>
+			</nav>
+
+			<!-- Bouton "Get Started" -->
+			<a class="btn-getstarted" href="{{ path('create-reclamation') }}">Get Started</a>
+		</div>
+	</header>
+	<section1></section1>
+	<section1></section1>
+	<section1></section1>
+	<!-- Contenu principal -->
+	<div class="container-fluid p-0" style="background-image: url('{{ asset('images/background.jpg') }}'); background-size: cover; background-position: center; min-height: 100vh;">
+		<div class="overlay">
+			<div
+				class="container pt-5">
+				<!-- Titre du questionnaire -->
+				<h2 class="text-center mb-4">Questionnaire sur le processus de réclamation</h2>
+
+				<!-- Chatbot container -->
+				<div
+					class="chatbot-container" id="chatbot">
+					<!-- Messages du chatbot -->
+					<div
+						class="chat-messages" id="chatMessages"><!-- Les messages s'afficheront ici -->
+					</div>
+
+					<!-- Boutons de réponse -->
+					<div class="response-buttons mt-3 text-center" id="responseButtons" style="display: none;">
+						<button class="btn btn-success" onclick="submitAnswer(true)">Vrai</button>
+						<button class="btn btn-danger" onclick="submitAnswer(false)">Faux</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		// Questions du questionnaire
+const questions = [
+"Avez-vous trouvé le processus de soumission de réclamation facile à comprendre ?",
+"Le temps de réponse à votre réclamation était-il satisfaisant ?",
+"Les solutions proposées ont-elles répondu à vos attentes ?",
+"Recommanderiez-vous notre service de réclamation à d'autres clients ?",
+"La communication tout au long du processus était-elle claire ?"
+];
+
+let currentQuestion = 0;
+let answers = [];
+
+// Fonction pour démarrer le questionnaire
+function startQuestionnaire() {
+const chatMessages = document.getElementById('chatMessages');
+chatMessages.innerHTML = '';
+askQuestion();
+}
+
+// Fonction pour afficher une question
+function askQuestion() {
+if (currentQuestion < questions.length) {
+const chatMessages = document.getElementById('chatMessages');
+const messageDiv = document.createElement('div');
+messageDiv.className = 'message bot-message';
+messageDiv.textContent = questions[currentQuestion];
+chatMessages.appendChild(messageDiv);
+
+document.getElementById('responseButtons').style.display = 'flex'; /* Afficher les boutons en flex */
+chatMessages.scrollTop = chatMessages.scrollHeight;
+} else {
+finishQuestionnaire();
+}
+}
+
+// Fonction pour soumettre une réponse
+function submitAnswer(isTrue) {
+const chatMessages = document.getElementById('chatMessages');
+const messageDiv = document.createElement('div');
+messageDiv.className = 'message user-message';
+messageDiv.textContent = isTrue ? 'Vrai' : 'Faux';
+chatMessages.appendChild(messageDiv);
+
+answers.push(isTrue);
+currentQuestion++;
+
+setTimeout(() => {
+if (currentQuestion < questions.length) {
+askQuestion();
+} else {
+finishQuestionnaire();
+}
+}, 500);
+}
+
+// Fonction pour terminer le questionnaire
+function finishQuestionnaire() {
+const chatMessages = document.getElementById('chatMessages');
+document.getElementById('responseButtons').style.display = 'none';
+
+const messageDiv = document.createElement('div');
+messageDiv.className = 'message bot-message';
+messageDiv.textContent = 'Merci pour vos réponses ! Vos avis nous aident à améliorer nos services.';
+chatMessages.appendChild(messageDiv);
+
+// Envoyer les résultats au serveur
+fetch('{{ path('app_save_avis') }}', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(
+{answers: answers, reclamationId: '{{ reclamation_id }}'}
+)
+});
+}
+
+// Démarrer le questionnaire au chargement de la page
+window.onload = startQuestionnaire;
+	</script>
+{% endblock %}

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Campers Dashboard</title>
+		<link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+	</head>
+	<body>
+		<header>
+			<div class="logo" title="University Management System">
+				<img src="{{ asset('assets/images/logo.png') }}" alt="">
+			</div>
+			<div class="navbar">
+				<a href={{path('app_user_index')}} class="active" onclick="timeTableAll()">
+					<span class="material-icons-sharp">home</span>
+					<h3>User</h3>
+				</a>
+				<a href={{path('app_list')}} onclick="timeTableAll()">
+					<span class="material-icons-sharp">event_available</span>
+					<h3>RECLAMATION</h3>
+				</a>
+				<a href="/restaurant" onclick="timeTableAll()">
+					<span class="material-icons-sharp">restaurant</span>
+					<h3>RESTAURANTS</h3>
+				</a>
+				<a href="/menu">
+					<span class="material-icons-sharp">menu</span>
+					<h3>MENU</h3>
+				</a>
+				<a href="/dashboardAdmin" onclick="timeTableAll()">
+					<span class="material-icons-sharp">article</span>
+					<h3>Blog</h3>
+				</a>
+				<a href="/events">
+					<span class="material-icons-sharp">events</span>
+					<h3>events</h3>
+				</a>
+				<a href="/transport">
+					<span class="material-icons-sharp">directions_bus</span>
+
+					<h3>transports</h3>
+				</a>
+				<a href="{{path('app_logout')}}">
+					<span class="material-icons-sharp">logout</span>
+					<h3>Logout</h3>
+				</a>
+			</div>
+			<div id="profile-btn">
+				<span class="material-icons-sharp">person</span>
+			</div>
+			<div class="theme-toggler">
+				<span class="material-icons-sharp active">light_mode</span>
+				<span class="material-icons-sharp">dark_mode</span>
+			</div>
+
+		</header>
+		<div class="container">
+			<aside>
+				<div class="profile">
+					<div class="top">
+						<div class="profile-photo">
+							<img src="{{ admin.image ? asset('uploads/' ~ admin.image) : asset('assets/images/default-avatar.png') }}" alt="User Photo">
+						</div>
+						<div class="info">
+							<p>Hey,
+								<b>{{ admin.nom ~ ' ' ~ admin.prenom }}</b>
+							</p>
+						</div>
+					</div>
+					<div class="about">
+						<h5>Role</h5>
+						<p>
+							{# Vous pouvez adapter la logique selon vos critères #}
+							{% if 'ROLE_ADMIN' in admin.roles %}
+								Admin Camper
+							{% else %}
+								Premium Camper
+							{% endif %}
+						</p>
+						<h5>Birthday</h5>
+						<p>{{ admin.dateDeNaissance ? admin.dateDeNaissance|date('d-M-Y') : 'Non renseigné' }}</p>
+						<h5>Contact</h5>
+						<p>{{ admin.telephone }}</p>
+						<h5>Email</h5>
+						<p>{{ admin.email }}</p>
+						<h5>Address</h5>
+						<p>{{ admin.adresse|default('Non renseignée') }}</p>
+					</div>
+				</div>
+			</aside>
+
+			<main>
+				<h1>Participation</h1>
+				<div class="subjects">
+					<div class="eg">
+						<span class="material-icons-sharp">hiking</span>
+						<h3>CAMPING</h3>
+						<h2>12/14</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>86%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="mth">
+						<span class="material-icons-sharp">event_available</span>
+						<h3>RESERVATION</h3>
+						<h2>27/29</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>93%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="cs">
+						<span class="material-icons-sharp">location_city</span>
+						<h3>CENTRE</h3>
+						<h2>27/30</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>81%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="cg">
+						<span class="material-icons-sharp">dns</span>
+						<h3>Database Management</h3>
+						<h2>24/25</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>96%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="net">
+						<span class="material-icons-sharp">router</span>
+						<h3>Network Security</h3>
+						<h2>25/27</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>92%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+				</div>
+
+				<div class="timetable" id="timetable">
+					<div>
+						<span id="prevDay">&lt;</span>
+						<h2>Today's Timetable</h2>
+						<span id="nextDay">&gt;</span>
+					</div>
+					<span class="closeBtn" onclick="timeTableAll()">X</span>
+					<table>
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Email</th>
+								<th>Nom</th>
+								<th>Prenom</th>
+								<th>Roles</th>
+								<th>Is_active</th>
+								<th>Image</th>
+								<th>Is_man</th>
+								<th>Telephone</th>
+								<th>Date_de_naissance</th>
+								<th>actions</th>
+							</tr>
+
+						</thead>
+						<tbody>
+							{% for user in users %}
+								<tr>
+									<td>{{ user.id }}</td>
+									<td>{{ user.email }}</td>
+									<td>{{ user.nom }}</td>
+									<td>{{ user.prenom }}</td>
+									<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+									<td>{{ user.isActive ? 'Yes' : 'No' }}</td>
+									<td><img src="{{ asset('uploads/' ~ user.image) }}" alt="User Image"></td>
+									<td>{{ user.isMan ? 'Yes' : 'No' }}</td>
+									<td>{{ user.telephone }}</td>
+									<td>{{ user.dateDeNaissance ? user.dateDeNaissance|date('Y-m-d') : '' }}</td>
+									<td>
+										<a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-info btn-sm">show</a>
+										<a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm">edit</a>
+										<a href="{{ path('admin_user_export_pdf', {'id': user.id}) }}" class="btn btn-danger">
+											<i class="fas fa-file-pdf"></i> Exporter en PDF
+										</a>
+										
+										<form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display:inline;" id="delete-form-{{ user.id }}">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+										</form>
+										{% if user.isActive %}
+											<a href="{{ path('admin_user_deactivate', {id: user.id}) }}" class="text-muted"
+											onclick="event.preventDefault(); if (confirm('Êtes-vous sûr de vouloir désactiver cet utilisateur ?')) { document.getElementById('deactivate-form-{{ user.id }}').submit(); }">
+												<i class="fas fa-ban"></i> Désactiver
+											</a>
+											<form id="deactivate-form-{{ user.id }}" action="{{ path('admin_user_deactivate', {id: user.id}) }}" method="post" style="display: none;">
+												<input type="hidden" name="_token" value="{{ csrf_token('deactivate' ~ user.id) }}">
+											</form>
+										{% else %}
+											{# Lien pour Activer #}
+											<a href="{{ path('admin_user_activate', {id: user.id}) }}" class="text-success"
+											onclick="event.preventDefault(); if (confirm('Voulez-vous activer cet utilisateur ?')) { document.getElementById('activate-form-{{ user.id }}').submit(); }">
+												<i class="fas fa-check"></i> Activer
+											</a>
+											<form id="activate-form-{{ user.id }}" action="{{ path('admin_user_activate', {id: user.id}) }}" method="post" style="display: none;">
+												<input type="hidden" name="_token" value="{{ csrf_token('activate' ~ user.id) }}">
+											</form>
+										{% endif %}
+
+
+										
+										<a href="#" class="btn btn-danger btn-sm" onclick="event.preventDefault(); if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) { document.getElementById('delete-form-{{ user.id }}').submit(); }">delete</a>
+									</td>
+
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="12">no records found</td>
+								</tr>
+							{% endfor %}
+
+						</tbody>
+					</table>
+				</div>
+			</main>
+
+			<div class="right">
+				<div class="announcements">
+					<h2>Announcements</h2>
+					<div class="updates">
+						<div class="message">
+							<p>
+								<b>Academic</b>
+								Summer training internship with Live Projects.</p>
+							<small class="text-muted">2 Minutes Ago</small>
+						</div>
+						<div class="message">
+							<p>
+								<b>Co-curricular</b>
+								Global internship oportunity by Student organization.</p>
+							<small class="text-muted">10 Minutes Ago</small>
+						</div>
+						<div class="message">
+							<p>
+								<b>Examination</b>
+								Instructions for Mid Term Examination.</p>
+							<small class="text-muted">Yesterday</small>
+						</div>
+					</div>
+				</div>
+
+				<div class="leaves">
+					<h2>Teachers on leave</h2>
+					<div class="teacher">
+						<div class="profile-photo"><img src="{{ asset('assets/images/profile-2.jpeg') }}" alt=""></div>
+						<div class="info">
+							<h3>The Professor</h3>
+							<small class="text-muted">Full Day</small>
+						</div>
+					</div>
+					<div class="teacher">
+						<div class="profile-photo"><img src="{{ asset('assets/images/profile-3.jpg') }}" alt=""></div>
+						<div class="info">
+							<h3>Lisa Manobal</h3>
+							<small class="text-muted">Half Day</small>
+						</div>
+					</div>
+					<div class="teacher">
+						<div class="profile-photo"><img src="{{ asset('assets/images/profile-4.jpg') }}" alt=""></div>
+						<div class="info">
+							<h3>Himanshu Jindal</h3>
+							<small class="text-muted">Full Day</small>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<script src="{{ asset('assets/js/timeTable.js') }}"></script>
+		<script src="{{ asset('assets/js/app.js') }}"></script>
+
+	</body>
+</html>

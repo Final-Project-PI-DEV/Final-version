@@ -1,0 +1,294 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="{{ asset('assets/cssaziz/card.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/scss/style.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/cssaziz/footer.css') }}">
+	 <!-- Vos autres liens CSS -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        /* Ajoutez ici d'autres styles si nécessaire */
+    </style>
+{% endblock %}
+{% block body %}
+{{include('reclamation/index1.html.twig')}}
+<div class="d-flex justify-content-start mb-3" style="margin-top: 150px;">
+			<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
+				<i class="fas fa-filter me-2"></i> Filtrer
+			</button>
+		</div>
+
+		<!-- ✅ Sidebar pour le filtrage -->
+		<div class="offcanvas offcanvas-start" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
+			<div class="offcanvas-header">
+				<h5 class="offcanvas-title" id="filterSidebarLabel">Filtrer les événements</h5>
+				<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			</div>
+			<div class="offcanvas-body">
+				<form method="get">
+					<!-- Prix -->
+					<div class="mb-3">
+						<label for="minPrice">Prix min :</label>
+						<input type="number" class="form-control" name="minPrice" placeholder="Prix min" value="{{ currentFilters.minPrice ?? '' }}">
+					</div>
+
+					<div class="mb-3">
+						<label for="maxPrice">Prix max :</label>
+						<input type="number" class="form-control" name="maxPrice" placeholder="Prix max" value="{{ currentFilters.maxPrice ?? '' }}">
+					</div>
+					<div class="mb-3">
+   						 <label for="minDate">Date de début (min) :</label>
+    					<input type="date" class="form-control" name="minDate" value="{{ currentFilters.minDate ?? '' }}">
+					</div>
+
+					<div class="mb-3">
+    					<label for="maxDate">Date de début (max) :</label>
+    					<input type="date" class="form-control" name="maxDate" value="{{ currentFilters.maxDate ?? '' }}">
+					</div>
+					<div class="mb-3">
+    					<label for="minEndDate">Date de fin (min) :</label>
+    					<input type="date" class="form-control" name="minEndDate" value="{{ currentFilters.minEndDate ?? '' }}">
+					</div>
+
+					<div class="mb-3">
+   						 <label for="maxEndDate">Date de fin (max) :</label>
+  						  <input type="date" class="form-control" name="maxEndDate" value="{{ currentFilters.maxEndDate ?? '' }}">
+					</div>
+
+					<!-- Type d'événement -->
+					<div class="mb-3">
+						<label for="eventType">Type d'événement :</label>
+						<select class="form-select" name="eventType">
+							<option value="">Tous les types</option>
+							{% for type in eventTypes %}
+								<option value="{{ type }}" {{ (currentFilters.eventType is defined and currentFilters.eventType == type) ? 'selected' }}>
+									{{ type|capitalize }}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<!-- Type de transport -->
+					<div class="mb-3">
+						<label for="typetransport">Type de Transport :</label>
+						<select class="form-select" name="typetransport">
+							<option value="">Tous les types de transport</option>
+							{% for transport in transportTypes %}
+								<option value="{{ transport }}" {{ (currentFilters.typetransport is defined and currentFilters.typetransport == transport) ? 'selected' }}>
+									{{ transport|capitalize }}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<!-- Lieu -->
+					<div class="mb-3">
+						<label for="lieu">Lieu :</label>
+						<input type="text" class="form-control" name="lieu" placeholder="Rechercher un lieu..." value="{{ currentFilters.lieu ?? '' }}">
+					</div>
+
+					<!-- Boutons -->
+					<button type="submit" class="btn btn-primary w-100">
+						<i class="fas fa-filter me-2"></i> Appliquer les filtres
+					</button>
+					<a href="{{ path('app_yassine_index') }}" class="btn btn-outline-secondary w-100 mt-2">
+						Réinitialiser
+					</a>
+				</form>
+			</div>
+		</div>
+
+
+		
+	<div class="container py-5">
+		<h1 class="text-center mb-5 display-4 fw-bold text-primary">Nos événements</h1>
+
+		<!-- Swiper Container -->
+		<div class="swiper mySwiper">
+			<div class="swiper-wrapper">
+				{% for event in events %}
+					<div class="swiper-slide">
+						<div
+							class="event-card">
+
+							<!-- Image -->
+							<div class="card-image">
+								{% if event.image %}
+									<img src="{{ asset('uploads/images/' ~ event.image) }}" 
+     									alt="{{ event.titre }}" 
+     										style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+								{% else %}
+									<div class="d-flex align-items-center justify-content-center h-100 bg-light">
+										<i class="fas fa-image fa-3x text-muted"></i>
+									</div>
+								{% endif %}
+							</div>
+
+							<!-- Contenu -->
+							<div class="card-content">
+								<h3 class="card-title">{{ event.titre }}</h3>
+								<div class="card-details">
+									<p>
+										<i class="fas fa-map-marker-alt"></i>
+										{{ event.lieu }}</p>
+									<p>
+										<i class="fas fa-calendar-day"></i>
+										{{ event.dateDebut|date('M d, Y') }}</p>
+									<p>
+										<i class="fas fa-tag"></i>
+										{{ event.typeevent }}</p>
+								</div>
+							</div>
+
+							<!-- Boutons placés en dessous de la carte -->
+							<div class="d-flex justify-content-between p-2 bg-light rounded-bottom">
+								<a href="{{ path('app_events_show', {'id': event.id}) }}" class="btn btn-info btn-sm">
+									<i class="fas fa-eye"></i>
+									View
+								</a>
+								<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ loop.index }}">
+									<i class="fas fa-info-circle"></i>
+									Details
+								</button>
+							</div>
+
+						</div>
+					</div>
+				{% else %}
+					<div class="no-events">
+						<i class="fas fa-calendar-times fa-4x mb-3"></i>
+						<h3>No Events Found</h3>
+						<p class="text-muted">Create your first event to get started</p>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div class="swiper-pagination"></div>
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+		</div>
+
+		<!-- Modals Section -->
+		{% for event in events %}
+			<div class="modal fade" id="modal{{ loop.index }}" tabindex="-1" aria-labelledby="modalLabel{{ loop.index }}" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalLabel{{ loop.index }}">{{ event.titre }}</h5>
+							<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div class="modal-detail">
+								<p class="mb-2">
+									<strong>📝 Description:</strong>
+								</p>
+								<p class="text-muted">{{ event.description }}</p>
+							</div>
+							<div class="row g-4">
+								<div class="col-md-6">
+									<div class="modal-detail">
+										<p>
+											<strong>📅 Date de début:</strong>
+											{{ event.dateDebut|date('d M Y H:i') }}</p>
+										<p>
+											<strong>📅 Date de fin:</strong>
+											{{ event.dateFin|date('d M Y H:i') }}</p>
+										<p>
+											<strong>💵 Prix:</strong>
+											<span class="text-success">{{ event.prix }}
+												DT</span>
+										</p>
+										<p>
+											<strong>🎬 Film:</strong>
+											{{ event.film }}</p>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="modal-detail transport-info">
+										<h6 class="mb-3" style="color: #2d6a4f;">🚍 Détails du transport</h6>
+										<p>
+											<strong>Type:</strong>
+											{{ event.transport.typetransport }}</p>
+										<p>
+											<strong>Places:</strong>
+											{{ event.transport.nbreplace }}</p>
+										<p>
+											<strong>Matricule:</strong>
+											{{ event.transport.matricule }}</p>
+										<p>
+											<strong>Escales:</strong>
+											{{ event.transport.nbreescale }}</p>
+										<p>
+											<strong>🕒 Départ:</strong>
+											{{ event.transport.heureDepart|date('H:i - d M Y') }}</p>
+										<p>
+											<strong>🕒 Arrivée:</strong>
+											{{ event.transport.heureArrive|date('H:i - d M Y') }}</p>
+										<p>
+											<strong>📋 Description transport:</strong>
+											<span class="text-muted">{{ event.transport.description }}</span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+	</div>
+	
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+	<!-- Correction affichage auto du modal -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+let modals = document.querySelectorAll('.modal.show');
+modals.forEach(modal => {
+let bsModal = bootstrap.Modal.getInstance(modal);
+if (bsModal) {
+bsModal.hide();
+}
+});
+});
+
+// Initialisation du Swiper
+new Swiper('.mySwiper', {
+slidesPerView: 1,
+spaceBetween: 30,
+centeredSlides: true,
+pagination: {
+el: '.swiper-pagination',
+clickable: true
+},
+navigation: {
+nextEl: '.swiper-button-next',
+prevEl: '.swiper-button-prev'
+},
+breakpoints: {
+576: {
+slidesPerView: 2
+},
+992: {
+slidesPerView: 3
+},
+1200: {
+slidesPerView: 4
+}
+}
+});
+	</script>
+{{ include('events/footer.html.twig') }}
+{% endblock %}

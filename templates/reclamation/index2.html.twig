@@ -1,0 +1,57 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campers Dashboard</title>
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+</head>
+<header>
+    <div class="logo" title="University Management System">
+        <img src="{{ asset('assets/images/logo.png') }}" alt="">
+    </div>
+    <div class="navbar">
+        <a href={{path('app_user_index')}} class="active" onclick="timeTableAll()">
+            <span class="material-icons-sharp">home</span>
+            <h3>User</h3>
+        </a>
+        <a href={{path('app_list')}} onclick="timeTableAll()">
+            <span class="material-icons-sharp">event_available</span>
+            <h3>RECLAMATION</h3>
+        </a>
+        <a href="/restaurant" onclick="timeTableAll()">
+            <span class="material-icons-sharp">restaurant</span>
+            <h3>RESTAURANTS</h3>
+        </a>
+        <a href="/menu">
+            <span class="material-icons-sharp">menu</span>
+            <h3>MENU</h3>
+        </a>
+        <a href="/dashboardAdmin" onclick="timeTableAll()">
+            <span class="material-icons-sharp">article</span>
+            <h3>Blog</h3>
+        </a>
+        <a href="/events">
+            <span class="material-icons-sharp">events</span>
+            <h3>events</h3>
+        </a>
+        <a href="/transport">
+            <span class="material-icons-sharp">directions_bus</span>
+
+            <h3>transports</h3>
+        </a>
+        <a href="{{path('app_logout')}}">
+            <span class="material-icons-sharp">logout</span>
+            <h3>Logout</h3>
+        </a>
+    </div>
+    <div id="profile-btn">
+        <span class="material-icons-sharp">person</span>
+    </div>
+    <div class="theme-toggler">
+        <span class="material-icons-sharp active">light_mode</span>
+        <span class="material-icons-sharp">dark_mode</span>
+    </div>
+
+</header>

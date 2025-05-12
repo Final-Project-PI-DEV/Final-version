@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campers Dashboard</title>
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+</head>
+<body>
+     <header>
+        <div class="logo" title="University Management System">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="">
+        </div>
+        <div class="navbar">
+            <a href="index.html">
+                <span class="material-icons-sharp">home</span>
+                <h3>User</h3>
+            </a>
+            <a href="timetable.html" class="active">
+                <span class="material-icons-sharp">event_available</span>
+                <h3>Materiel</h3>
+            </a> 
+            <a href="exam.html">
+                <span class="material-icons-sharp">sports_esports</span>
+                <h3>LOISIR</h3>
+            </a>
+            <a href="password.html" >
+                <span class="material-icons-sharp">hiking</span>
+                <h3>CAMPINGS</h3>
+            </a>
+            <a href="#">
+                <span class="material-icons-sharp">logout</span>
+                <h3>Logout</h3>
+            </a>
+        </div>
+        <div id="profile-btn">
+            <span class="material-icons-sharp">person</span>
+        </div>
+        <div class="theme-toggler">
+            <span class="material-icons-sharp active">light_mode</span>
+            <span class="material-icons-sharp">dark_mode</span>
+        </div>
+        
+    </header>
+    
+    <div class="container">
+        <aside>
+            <div class="profile">
+                <div class="top">
+                    <div class="profile-photo">
+                        <img src="{{ asset('assets/images/profile-1.jpg') }}" alt="">
+                    </div>
+                    <div class="info">
+                        <p>Hey, <b>Alex</b> </p>
+                        <small class="text-muted">12102030</small>
+                    </div>
+                </div>
+                <div class="about">
+                    <h5>Membership Level</h5>
+                    <p>Premium Camper</p>
+                    <h5>Birthday</h5>
+                    <p>29-Feb-2020</p>
+                    <h5>Contact</h5>
+                    <p>1234567890</p>
+                    <h5>Email</h5>
+                    <p>alex@campers.com</p>
+                    <h5>Address</h5>
+                    <p>Sunny Campsite, Pine Valley, USA</p>
+                </div>
+            </div>
+        </aside>
+
+ <main>
+            <h1>Participation</h1>
+            <div class="subjects">
+                <div class="eg">
+                    <span class="material-icons-sharp">hiking</span>
+                    <h3>CAMPING</h3>
+                    <h2>12/14</h2>
+                    <div class="progress">
+                        <svg><circle cx="38" cy="38" r="36"></circle></svg>
+                        <div class="number"><p>86%</p></div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>
+                <div class="mth">
+                    <span class="material-icons-sharp">event_available</span>
+                    <h3>RESERVATION</h3>
+                    <h2>27/29</h2>
+                    <div class="progress">
+                        <svg><circle cx="38" cy="38" r="36"></circle></svg>
+                        <div class="number"><p>93%</p></div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>
+                <div class="cs">
+                    <span class="material-icons-sharp">location_city</span>
+                    <h3>CENTRE</h3>
+                    <h2>27/30</h2>
+                    <div class="progress">
+                        <svg><circle cx="38" cy="38" r="36"></circle></svg>
+                        <div class="number"><p>81%</p></div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>
+                <div class="cg">
+                    <span class="material-icons-sharp">dns</span>
+                    <h3>Database Management</h3>
+                    <h2>24/25</h2>
+                    <div class="progress">
+                        <svg><circle cx="38" cy="38" r="36"></circle></svg>
+                        <div class="number"><p>96%</p></div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>
+                <div class="net">
+                    <span class="material-icons-sharp">router</span>
+                    <h3>Network Security</h3>
+                    <h2>25/27</h2>
+                    <div class="progress">
+                        <svg><circle cx="38" cy="38" r="36"></circle></svg>
+                        <div class="number"><p>92%</p></div>
+                    </div>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>
+            </div>
+        <main>
+            <div class="timetable" id="timetable">
+                <div>
+                    <h2>Gestion du Matériel</h2>
+                    <a href="{{ path('app_materiel_new') }}" class="btn-add">
+                        <span class="material-icons-sharp">add</span>
+                        Nouveau Matériel
+                    </a>
+                </div>
+                
+                {% if materiels is empty %}
+                    <div class="no-items">
+                        <h2>Aucun matériel disponible</h2>
+                        <p>Commencez par ajouter du nouveau matériel</p>
+                    </div>
+                {% else %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Nom</th>
+                                <th>Type</th>
+                                <th>Quantité</th>
+                                <th>Prix</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for materiel in materiels %}
+                            <tr>
+                                <td>
+                                {{ materiel.imagePath }}
+                            </td>
+                                <td>{{ materiel.name }}</td>
+                                <td>{{ materiel.type }}</td>
+                                <td>{{ materiel.quantityAvailable }}/{{ materiel.quantity }}</td>
+                                                    <td>{{ materiel.price}} TND</td>
+                                                    <td class="actions">
+                       <a href="{{ path('app_materiel_edit', {'id': materiel.id}) }}" class="btn btn-primary">Modifier</a>
+										<a href={{ path('app_materiel_delete', {'id': materiel.id} ) }}" 
+                                        onclick=" return confirm('êtes-vous sûr de vouloir supprimer cet événement ?');
+                                        ">Supprimer</a>
+                    </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </main>
+
+        <div class="right">
+            <div class="right">
+            <div class="announcements">
+                <h2>Announcements</h2>
+                <div class="updates">
+                    <div class="message">
+                        <p> <b>Academic</b> Summer training internship with Live Projects.</p>
+                        <small class="text-muted">2 Minutes Ago</small>
+                    </div>
+                    <div class="message">
+                        <p> <b>Co-curricular</b> Global internship oportunity by Student organization.</p>
+                        <small class="text-muted">10 Minutes Ago</small>
+                    </div>
+                    <div class="message">
+                        <p> <b>Examination</b> Instructions for Mid Term Examination.</p>
+                        <small class="text-muted">Yesterday</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leaves">
+                <h2>Teachers on leave</h2>
+                <div class="teacher">
+                    <div class="profile-photo"><img src="{{ asset('assets/images/profile-2.jpeg') }}" alt=""></div>
+                    <div class="info">
+                        <h3>The Professor</h3>
+                        <small class="text-muted">Full Day</small>
+                    </div>
+                </div>
+                <div class="teacher">
+                    <div class="profile-photo"><img src="{{ asset('assets/images/profile-3.jpg') }}" alt=""></div>
+                    <div class="info">
+                        <h3>Lisa Manobal</h3>
+                        <small class="text-muted">Half Day</small>
+                    </div>
+                </div>
+                <div class="teacher">
+                    <div class="profile-photo"><img src="{{ asset('assets/images/profile-4.jpg') }}" alt=""></div>
+                    <div class="info">
+                        <h3>Himanshu Jindal</h3>
+                        <small class="text-muted">Full Day</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ asset('assets/js/timeTable.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+    
+</body>
+</html>

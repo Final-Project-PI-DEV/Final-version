@@ -1,0 +1,780 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Rahalla.tn
+{% endblock %}
+{% block stylesheets %}
+	{# Liens vers les fichiers CSS externes #}
+	<link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/vendor/aos/aos.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link
+	rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap">
+
+	{# Styles personnalisés #}
+	<style>
+	/* Variables CSS */:root
+	{
+		--primary-color: #2C3E50;
+		--secondary-color: #34495E;
+		--accent-color: #FF9800;
+		--danger-color: #E74C3C;
+		--text-color: #ffffff;
+		--bg-light: #ECF0F1;
+		--bg-dark: #222;
+	}
+
+	/* Reset CSS */
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: 'Inter', sans-serif;
+	}
+	.button {
+		background-color: var(--accent-color);
+		color: white;
+		padding: 10px 20px;
+		border-radius: 5px;
+	}
+
+	body {
+		background-color: var(--bg-light);
+		color: var(--primary-color);
+		padding: 20px;
+	}
+
+	h1 {
+		color: white;
+		margin-bottom: 20px;
+		text-align: center;
+	}
+
+	h2 {
+		color: black; /* Couleur du texte */
+		margin-bottom: 20px; /* Marge en bas du titre */
+		text-align: center; /* Alignement du texte à gauche */
+		font-family: 'Roboto', sans-serif; /* Police de caractères */
+		font-weight: 700; /* Épaisseur de la police (gras) */
+		font-size: 24px; /* Taille de la police */
+		text-transform: uppercase; /* Texte en majuscules */
+		letter-spacing: 1px; /* Espacement entre les lettres */
+	}
+	h5 {
+		color: black; /* Couleur du texte */
+		/* margin-bottom: 20px; /* Marge en bas du titre */
+		text-align: left; /* Alignement du texte à gauche */
+		font-family: 'Roboto', sans-serif; /* Police de caractères */
+		font-weight: 700; /* Épaisseur de la police (gras) */
+		font-size: 20px; /* Taille de la police */
+		text-transform: uppercase; /* Texte en majuscules */
+	}
+
+	h3 {
+		color: var(--primary-color);
+		margin-bottom: 20px;
+		text-align: center;
+	}
+
+	/* Section de recherche */
+	.search-section {
+		position: relative;
+		width: 100vw;
+		margin: 0 0 50px;
+		height: 100vh;
+		background: url('{{ asset('assets/images/backkk.jpg') }}') center/cover no-repeat;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		color: white;
+		padding: 20px;
+	}
+
+	.search-box {
+		display: flex;
+		align-items: center;
+		background: white;
+		border-radius: 50px;
+		padding: 10px 20px;
+		width: 60%;
+		max-width: 600px;
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	}
+
+	.search-box input {
+		border: none;
+		outline: none;
+		font-size: 16px;
+		width: 100%;
+		padding: 10px;
+		background: transparent;
+	}
+	.average-rating {
+		font-weight: bold;
+		color: #18BC9C; /* Couleur verte pour la note moyenne */
+	}
+
+	.rating-count {
+		font-style: italic;
+		color: #666; /* Couleur grise pour le nombre d'avis */
+	}
+	.star-rating {
+		display: flex;
+		flex-direction: center; /* Pour afficher les étoiles de droite à gauche */
+		justify-content: center;
+		gap: 5px;
+	}
+
+	.star-rating input {
+		display: none; /* Masquer les boutons radio */
+	}
+
+	.star-rating label {
+		cursor: pointer;
+		color: #ccc; /* Couleur des étoiles non sélectionnées */
+		transition: color 0.2s;
+	}
+
+	.star-rating input:checked ~ label,
+	.star-rating label:hover,
+	.star-rating label:hover ~ label {
+		color: #ffc107; /* Couleur des étoiles sélectionnées ou survolées */
+	}
+
+	/* Section des restaurants */
+	.restaurant-container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 20px;
+	}
+
+	/*.restaurant-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            transition: transform 0.3s ease-in-out;
+            text-align: center;
+            padding-bottom: 15px;
+            
+        }*/
+	.restaurant-card {
+		position: relative; /* Permet de positionner le statut par rapport à la carte */
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		padding: 16px;
+		margin-bottom: 16px;
+		background-color: #fff;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.restaurant-card:hover {
+		transform: scale(1.05);
+	}
+
+	.restaurant-image img {
+		width: 100%;
+		height: 180px;
+		object-fit: cover;
+	}
+
+	.restaurant-content {
+		padding: 15px;
+	}
+
+	.restaurant-content h2 {
+		font-size: 20px;
+		margin-bottom: 10px;
+	}
+
+	.restaurant-content p {
+		font-size: 14px;
+		color: #666;
+		margin-bottom: 10px;
+	}
+
+	.status {
+		position: absolute; /* Position absolue par rapport à la carte */
+		top: 10px; /* Espacement depuis le haut */
+		right: 10px; /* Espacement depuis la droite */
+		font-size: 12px; /* Taille de police petite */
+		padding: 4px 8px; /* Padding pour un meilleur rendu */
+		border-radius: 4px; /* Coins arrondis */
+		color: #fff; /* Couleur du texte */
+		text-transform: capitalize; /* Capitaliser la première lettre */
+	}
+
+	.status.actif {
+		background: var(--accent-color);
+		color: white;
+	}
+
+	.status.inactif {
+		background: var(--danger-color);
+		color: white;
+	}
+
+	.restaurant-email {
+		font-size: 14px;
+		color: var(--secondary-color);
+		margin-top: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.restaurant-email i {
+		font-size: 18px;
+		margin-right: 5px;
+		color: var(--primary-color);
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 10px 15px;
+		background: var(--accent-color);
+		color: white;
+		border: none;
+		border-radius: 5px;
+		text-align: center;
+		font-size: 14px;
+		cursor: pointer;
+		transition: background 0.3s ease;
+		text-decoration: none;
+	}
+
+	.btn:hover {
+		background: var(--secondary-color);
+	}
+
+	.menu-container {
+		margin-top: 15px;
+		padding: 10px;
+		background: #f9f9f9;
+		border-radius: 8px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		display: none;
+	}
+
+	.menu-container h3 {
+		font-size: 16px;
+		margin-bottom: 10px;
+	}
+
+	.menu-container ul {
+		list-style: none;
+		padding: 0;
+	}
+
+	.menu-container ul li {
+		padding: 5px 0;
+		font-size: 14px;
+	}
+
+	.menu-container ul li a {
+		text-decoration: none;
+		color: var(--primary-color);
+		font-weight: bold;
+	}
+
+	.menu-container ul li a:hover {
+		color: var(--accent-color);
+	}
+
+	.btn-quantity {
+		background: var(--accent-color);
+		color: white;
+		border: none;
+		border-radius: 5px;
+		padding: 5px 10px;
+		font-size: 14px;
+		cursor: pointer;
+		margin: 5px;
+		transition: background 0.3s;
+	}
+
+	.btn-quantity:hover {
+		background: var(--secondary-color);
+	}
+
+	.quantity {
+		font-size: 16px;
+		font-weight: bold;
+		margin: 0 10px;
+	}
+
+	.total-price {
+		font-size: 18px;
+		font-weight: bold;
+		margin-top: 10px;
+	}
+	.restaurant-section {
+		display: flex;
+		gap: 20px;
+		justify-content: center;
+		margin-bottom: 50px;
+	}
+
+	.card {
+		background: white;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		text-align: center;
+		width: 300px;
+		transition: transform 0.3s;
+	}
+
+	.card:hover {
+		transform: translateY(-5px);
+	}
+
+	.icon {
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+		margin-bottom: 15px;
+	}
+
+	.icon i {
+		background: #00A680;
+		color: white;
+		padding: 10px;
+		border-radius: 50%;
+		font-size: 20px;
+	}
+
+	.icon img {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	h3 {
+		color: #007A5E;
+		font-size: 18px;
+		margin-bottom: 10px;
+	}
+
+	p {
+		color: #333;
+		font-size: 14px;
+	}
+	.total-general-container {
+		text-align: center; /* Centre le texte */
+		font-size: 24px; /* Augmente la taille du texte */
+		font-weight: bold; /* Met le texte en gras */
+		color: black; /* Assure que la couleur est correcte */
+		background: white; /* Ajoute un fond blanc */
+		padding: 15px; /* Ajoute un peu d'espace autour */
+		border-radius: 10px; /* Arrondit les bords */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajoute une ombre légère */
+		width: fit-content; /* Ajuste la largeur au contenu */
+		margin: 2
+	}
+	.button {
+		position: relative;
+		overflow: hidden;
+		height: 3rem;
+		padding: 0 2rem;
+		border-radius: 1.5rem;
+		background: #3d3a4e;
+		background-size: 400%;
+		color: #fff;
+		border: none;
+		cursor: pointer;
+	}
+
+	.button:hover::before {
+		transform: scaleX(1);
+	}
+
+	.btn-commander {
+		position: relative;
+		z-index: 1;
+	}
+
+	.button::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		transform: scaleX(0);
+		transform-origin: 0 50%;
+		width: 100%;
+		height: inherit;
+		border-radius: inherit;
+		background: linear-gradient(82.3deg, rgb(5, 132, 163) 10.8%, rgb(238, 178, 88) 94.3%);
+		transition: all 0.475s;
+	}
+	.button-note {
+		text-align: center; /* Centre le bouton horizontalement */
+		margin-bottom: 20px;
+	}
+	.btn-voir-plus {
+		text-align: center; /* Centre le bouton horizontalement */
+	}
+	.btnn {
+		color: rgb(245, 190, 71);
+		text-transform: uppercase;
+		text-decoration: none;
+		border: 2px solid rgb(235, 180, 1);
+		padding: 10px 20px;
+		font-size: 17px;
+		cursor: pointer;
+		font-weight: bold;
+		background: transparent;
+		position: relative;
+		transition: all 1s;
+		overflow: hidden;
+		margin: 20px auto; /* Centrage horizontal */
+		display: block;
+	}
+
+	.btnn:hover {
+		color: white;
+	}
+
+	.btnn::before {
+		content: "";
+		position: absolute;
+		height: 100%;
+		width: 0;
+		top: 0;
+		left: -40px;
+		transform: skewX(45deg);
+		background-color: rgb(235, 180, 1);
+		z-index: -1;
+		transition: all 1s;
+	}
+
+	.btnn:hover::before {
+		width: 160%;
+	}
+</style>{% endblock %}{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+			<a href="{{ path('sign-in') }}" class="logo d-flex align-items-center me-auto me-lg-0">
+				<img src="{{ asset('assets/images/logorz1.png') }}" class="logo-img">
+			</a>
+			<nav id="navmenu" class="navmenu">
+				<ul>
+					<li>
+						<a href="#hero">Home</a>
+					</li>
+					<li>
+						<a href="{{ path('link1') }}">About</a>
+					</li>
+					<li>
+						<a href="{{ path('link2') }}">Services</a>
+					</li>
+					<li>
+						<a href="{{ path('resto') }}" class="active">Restaurants</a>
+					</li>
+					<li>
+						<a href="#">Contact</a>
+					</li>
+				</ul>
+				<i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+			</nav>
+			<a class="btn-getstarted" href="{{ path('sign-in') }}">Get Started</a>
+		</div>
+		<!-- Métadonnées et liens CSS -->
+	</head>
+	<body>
+		<main
+			class="main container mt-5">
+			<!-- Section des fonctionnalités -->
+			<section class="restaurant-section">
+				<div class="card">
+					<div class="icon">
+						<i class="fas fa-utensils"></i>
+						<i class="fas fa-coffee"></i>
+						<i class="fas fa-ice-cream"></i>
+					</div>
+					<h3>Camping et bons plats, l’aventure parfaite</h3>
+					<p>des restaurants dans tous les styles, de la cuisine de rue à la gastronomie</p>
+				</div>
+
+				<div class="card">
+					<div class="icon">
+						<img src="https://randomuser.me/api/portraits/thumb/women/1.jpg" alt="user">
+						<img src="https://randomuser.me/api/portraits/thumb/men/2.jpg" alt="user">
+						<img src="https://randomuser.me/api/portraits/thumb/women/3.jpg" alt="user">
+					</div>
+					<h3>Voir les derniers avis</h3>
+					<p>Des millions de photos et d’avis sur les restaurants de notre communauté mondiale de campers</p>
+				</div>
+
+				<div class="card">
+					<div class="icon">
+						<i class="fas fa-concierge-bell"></i>
+						<i class="fas fa-calendar-check"></i>
+					</div>
+					<h3>Dînez sous les étoiles, commandez dès maintenant !</h3>
+					<p>Commandez en ligne et régalez-vous en camping</p>
+				</div>
+			</section>
+			<!-- Section des restaurants -->
+			<h2 class="text-center">Campez mieux avec nos restaurants.</h2>
+			<button class="btnn">
+				<a href="{{ path('app_restaurant_accueil') }}" class="btnn">
+					Voir recommandations
+				</a>
+			</button>
+
+			<div class="restaurant-container">
+				{% for restaurant in restaurants %}
+					<div class="restaurant-card">
+						<span class="status {{ restaurant.statut|lower }}">{{ restaurant.statut }}</span>
+						<div class="restaurant-image">
+							{% if restaurant.image %}
+								<img src="{{ asset('uploads/restaurants/' ~ restaurant.image) }}" alt="{{ restaurant.nomResto }}">
+							{% else %}
+								<p>Aucune image disponible</p>
+							{% endif %}
+						</div>
+						<div class="restaurant-content">
+							<h5>{{ restaurant.nomResto }}</h5>
+							<p>{{ restaurant.description }}</p>
+							<span class="status {{ restaurant.statut|lower }}">{{ restaurant.statut }}</span>
+
+							<!-- Formulaire de notation -->
+							<form class="rating-form" action="{{ path('app_restaurant_rate', {'id': restaurant.id}) }}" method="POST" data-restaurant-id="{{ restaurant.id }}">
+								<div class="form-group">
+									<div class="star-rating">
+										{% for i in 5..1 %}
+											<input type="radio" id="star-{{ restaurant.id }}-{{ i }}" name="rating" value="{{ i }}"/>
+											<label for="star-{{ restaurant.id }}-{{ i }}" title="{{ i }} étoiles">
+												<i class="fas fa-star"></i>
+											</label>
+										{% endfor %}
+									</div>
+								</div>
+								<div class="button-note">
+									<button type="submit" class="btn btn-primary">Noter</button>
+								</div>
+							</form>
+
+							<!-- Affichage de la note moyenne -->
+							<p>Note moyenne :
+								<span class="average-rating">{{ restaurant.averageRating ?? 'Pas encore noté' }}</span>/5 (<span class="rating-count">{{ restaurant.ratingCount }}</span>
+								avis)</p>
+
+							<!-- Bouton "Voir Plus" et section des menus -->
+							<div class="button-note">
+								<button class="btn voir-plus" data-id="{{ restaurant.id }}">Voir Plus</button>
+							</div>
+							<div class="menu-container" id="menu-{{ restaurant.id }}">
+								<h4>Menus disponibles</h4>
+								{% if restaurant.menu is not empty %}
+									<ul>
+										{% for menu in restaurant.menu %}
+											<li>
+												<span>{{ menu.repas }}
+													-
+													<strong>{{ menu.prix }}
+														€</strong>
+												</span>
+												<button class="btn-quantity btn-minus" data-price="{{ menu.prix }}">-</button>
+												<span class="quantity" data-price="{{ menu.prix }}">0</span>
+												<button class="btn-quantity btn-plus" data-price="{{ menu.prix }}">+</button>
+											</li>
+										{% endfor %}
+									</ul>
+								{% else %}
+									<p>Aucun menu disponible pour ce restaurant.</p>
+								{% endif %}
+								<p class="total-price">Total:
+									<strong>
+										<span class="total">0</span>
+										€</strong>
+								</p>
+								<button class="button">
+									<span class="btn-commander" data-restaurant-id="{{ restaurant.id }}">Commander</span>
+								</button>
+
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</main>
+	</body>
+</html>{% endblock %}{% block javascripts %}
+<!-- Charger TensorFlow.js -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<!-- Charger le modèle MobileNet -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () { // Gestion des formulaires de notation
+const imageUpload = document.getElementById('image-upload');
+const resultDiv = document.getElementById('result');
+document.querySelectorAll(".rating-form").forEach(form => {
+form.addEventListener("submit", function (e) {
+e.preventDefault(); // Empêche le rechargement de la page
+
+const restaurantId = this.getAttribute("data-restaurant-id");
+const selectedRating = this.querySelector("input[name='rating']:checked");
+
+if (! selectedRating) {
+alert("Veuillez sélectionner une note avant de soumettre.");
+return;
+}
+
+const formData = new FormData(this);
+formData.set("rating", selectedRating.value); // Ajouter la note sélectionnée au formulaire
+
+fetch(this.action, {
+method: 'POST',
+body: formData,
+headers: {
+'X-Requested-With': 'XMLHttpRequest', // Indique que c'est une requête AJAX
+}
+}).then(response => response.json()).then(data => {
+if (data.success) { // Mettre à jour l'affichage de la note moyenne
+const card = this.closest(".restaurant-card");
+card.querySelector(".average-rating").textContent = data.averageRating.toFixed(1);
+card.querySelector(".rating-count").textContent = data.ratingCount;
+
+// Afficher un message de succès
+alert("Merci pour votre notation !");
+} else { // Afficher un message d'erreur
+alert(data.message);
+}
+}).catch(error => {
+console.error("Erreur lors de la soumission du formulaire : ", error);
+alert("Une erreur s'est produite. Veuillez réessayer.");
+});
+});
+});
+
+// Gestion des boutons "Voir Plus" et des menus
+document.querySelectorAll(".voir-plus").forEach(button => {
+button.addEventListener("click", function () {
+let restaurantId = this.getAttribute("data-id");
+let menuContainer = document.getElementById("menu-" + restaurantId);
+
+// Afficher ou masquer le menu
+if (menuContainer.style.display === "none" || menuContainer.style.display === "") {
+menuContainer.style.display = "block";
+this.textContent = "Masquer";
+} else {
+menuContainer.style.display = "none";
+this.textContent = "Voir Plus";
+}
+});
+});
+
+// Gestion des boutons + et -
+document.querySelectorAll(".btn-plus").forEach(button => {
+button.addEventListener("click", function () {
+let quantityElem = this.previousElementSibling;
+let price = parseFloat(this.getAttribute("data-price"));
+let quantity = parseInt(quantityElem.textContent);
+
+quantityElem.textContent = quantity + 1;
+updateTotal(this.closest(".menu-container"));
+});
+});
+
+document.querySelectorAll(".btn-minus").forEach(button => {
+button.addEventListener("click", function () {
+let quantityElem = this.nextElementSibling;
+let price = parseFloat(this.getAttribute("data-price"));
+let quantity = parseInt(quantityElem.textContent);
+
+if (quantity > 0) {
+quantityElem.textContent = quantity - 1;
+updateTotal(this.closest(".menu-container"));
+}
+});
+});
+
+function updateTotal(menuContainer) {
+let totalElem = menuContainer.querySelector(".total");
+let total = 0;
+
+menuContainer.querySelectorAll(".quantity").forEach(qtyElem => {
+let quantity = parseInt(qtyElem.textContent);
+let price = parseFloat(qtyElem.getAttribute("data-price"));
+total += quantity * price;
+});
+
+totalElem.textContent = total.toFixed(2);
+updateTotalGeneral(); // Mise à jour du total général
+}
+
+function updateTotalGeneral() {
+let totalGeneral = 0;
+document.querySelectorAll(".total").forEach(totalElem => {
+totalGeneral += parseFloat(totalElem.textContent);
+});
+document.getElementById("total-general").textContent = totalGeneral.toFixed(2);
+}
+// Gestion du bouton "Commander"
+document.querySelectorAll(".btn-commander").forEach(button => {
+button.addEventListener("click", function () {
+const restaurantId = this.getAttribute("data-restaurant-id");
+const menuContainer = this.closest(".menu-container");
+
+// Récupérer les menus sélectionnés
+const menus = [];
+menuContainer.querySelectorAll(".quantity").forEach(qtyElem => {
+const quantity = parseInt(qtyElem.textContent);
+if (quantity > 0) {
+const price = parseFloat(qtyElem.getAttribute("data-price"));
+menus.push({'name': qtyElem.previousElementSibling.textContent.trim(), 'quantity': quantity, 'price': price});
+}
+});
+
+// Envoyer la commande au serveur
+fetch("{{ path('app_restaurant_commander') }}", {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Requested-With': 'XMLHttpRequest'
+},
+body: JSON.stringify(
+{'restaurant_id': restaurantId, 'menus': menus}
+)
+}).then(response => response.json()).then(data => {
+if (data.success) {
+alert(`Commande validée ! ID de la commande : ${
+data.commandeId
+}\nTotal : ${
+data.total
+} €`);
+// Réinitialiser les quantités
+menuContainer.querySelectorAll(".quantity").forEach(qtyElem => {
+qtyElem.textContent = 0;
+});
+updateTotal(menuContainer);
+} else {
+alert("Erreur lors de la commande. Veuillez réessayer.");
+}
+}).catch(error => {
+console.error("Erreur lors de la commande : ", error);
+alert("Une erreur s'est produite. Veuillez réessayer.");
+});
+});
+});
+// Réinitialiser les quantités
+menuContainer.querySelectorAll(".quantity").forEach(qtyElem => {
+qtyElem.textContent = 0;
+});
+updateTotal(menuContainer);
+});
+</script>{% endblock %}

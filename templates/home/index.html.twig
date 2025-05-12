@@ -1,0 +1,1053 @@
+{# templates/home/index.html.twig #}
+{% extends 'base2.html.twig' %}
+
+
+{% block title %}Rahalla.tn
+{% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/styles/comment.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+	<style>
+		.comment-section {
+			max-width: 600px;
+			margin: auto;
+		}
+		.comment-form textarea {
+			resize: none;
+			font-size: 14px;
+		}
+
+		.comment-form button {
+			transition: 0.3s;
+		}
+
+		.comment-form button:hover {
+			background-color: #0056b3;
+		}
+
+		/* Hide the edit form by default */
+		.d-none {
+			display: none;
+		}
+
+		.filter-toggle-btn {
+			position: fixed;
+			top: 90px;
+			left: 20px;
+			z-index: 1000;
+			background-color: black;
+			border: none;
+			border-radius: 50%;
+			width: 50px;
+			height: 50px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			transition: transform 0.3s ease, background-color 0.3s ease;
+		}
+
+		.filter-toggle-btn:hover {
+			background-color: #FF883B;
+			transform: scale(1.1);
+		}
+
+		.filter-toggle-btn i {
+			font-size: 20px;
+			color: white;
+			transition: transform 0.3s ease;
+		}
+
+		.offcanvas {
+			width: 300px;
+			background-color: #ffffff;
+			box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+			transition: transform 0.3s ease;
+		}
+
+		.offcanvas-header {
+			background-color: rgba(51, 51, 51, 0.7) !important;
+			color: white;
+			padding: 15px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.offcanvas-title {
+			font-size: 1.25rem;
+			font-weight: bold;
+		}
+
+		.offcanvas-body {
+			padding: 20px;
+		}
+
+		.form-control {
+			border-radius: 8px;
+			border: 1px solid #ddd;
+			padding: 10px;
+			font-size: 14px;
+			transition: border-color 0.3s ease;
+		}
+
+		.form-control:focus {
+			border-color: #007bff;
+			box-shadow: none;
+		}
+
+		.btn-primary {
+			background-color: #007bff;
+			border: none;
+			border-radius: 8px;
+			padding: 10px;
+			font-size: 14px;
+			transition: background-color 0.3s ease;
+		}
+
+		.btn-primary:hover {
+			background-color: rgb(36, 127, 223);
+		}
+
+		.btn-outline-secondary {
+			border-radius: 8px;
+			padding: 10px;
+			font-size: 14px;
+		}
+
+		.filter-badge {
+			font-size: 0.9rem;
+			margin-right: 0.5rem;
+			padding: 0.5em 0.75em;
+			border-radius: 8px;
+		}
+		/* Style for emoji buttons */
+		.emoji-button {
+			background: none; /* No background */
+			border: none; /* No border */
+			padding: 0; /* No padding */
+			margin: 0; /* No margin */
+			cursor: pointer; /* Show pointer cursor on hover */
+			font-size: 16px; /* Adjust emoji size */
+			color: inherit; /* Use default text color */
+			transition: color 0.2s ease; /* Smooth color transition on hover */
+		}
+
+		.emoji-button:hover {
+			color: #007bff; /* Change color on hover (optional) */
+		}
+		/* Add this to your existing styles */
+		.position-relative {
+			position: relative;
+		}
+
+		.position-absolute {
+			position: absolute;
+		}
+
+		.end-0 {
+			right: 0;
+		}
+
+		.top-50 {
+			top: 50%;
+		}
+
+		.translate-middle-y {
+			transform: translateY(-50%);
+		}
+
+		.btn-sm {
+			padding: 0.25rem 0.5rem;
+			font-size: 0.875rem;
+		}
+		/* Add this to your existing styles */
+		.card-header {
+			background-color: #f8f9fa;
+			border-bottom: 1px solid #e9ecef;
+		}
+
+		.rounded-circle {
+			border-radius: 50%;
+		}
+
+		.fw-bold {
+			font-weight: bold;
+		}
+		.error-messages .alert {
+			margin-bottom: 10px;
+			padding: 10px;
+			border-radius: 5px;
+			font-size: 14px;
+		}
+		.chatbot-container {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			z-index: 1000;
+		}
+
+		.chatbot-toggle-btn {
+			background-color: #007bff;
+			border: none;
+			border-radius: 50%;
+			width: 50px;
+			height: 50px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.chatbot-toggle-btn i {
+			font-size: 24px;
+			color: white;
+		}
+
+		.chatbot-window {
+			display: none;
+			width: 300px;
+			height: 400px;
+			background-color: white;
+			border-radius: 10px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			flex-direction: column;
+		}
+
+		.chatbot-header {
+			background-color: #007bff;
+			color: white;
+			padding: 10px;
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.chatbot-close-btn {
+			background: none;
+			border: none;
+			color: white;
+			font-size: 20px;
+			cursor: pointer;
+		}
+
+		.chatbot-messages {
+			flex: 1;
+			padding: 10px;
+			overflow-y: auto;
+			background-color: #f8f9fa;
+		}
+
+		.chatbot-input {
+			display: flex;
+			padding: 10px;
+			background-color: white;
+			border-top: 1px solid #ddd;
+		}
+
+		.chatbot-input input {
+			flex: 1;
+			padding: 8px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			margin-right: 10px;
+		}
+
+		.chatbot-input button {
+			background-color: #007bff;
+			border: none;
+			border-radius: 5px;
+			color: white;
+			padding: 8px 12px;
+			cursor: pointer;
+		}
+
+		.chatbot-input button:hover {
+			background-color: #0056b3;
+		}
+
+		.message {
+			margin-bottom: 10px;
+			padding: 8px;
+			border-radius: 5px;
+			max-width: 80%;
+		}
+
+		.message.user {
+			background-color: #007bff;
+			color: white;
+			align-self: flex-end;
+		}
+
+		.message.bot {
+			background-color: #e9ecef;
+			color: black;
+			align-self: flex-start;
+		}
+		.flash-messages {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			z-index: 9999;
+			min-width: 300px;
+		}
+
+		.flash-message {
+			padding: 15px;
+			margin-bottom: 10px;
+			border-radius: 4px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+			animation: slideIn 0.5s ease-out;
+		}
+
+		.flash-success {
+			background-color: #d4edda;
+			border-color: #c3e6cb;
+			color: #155724;
+		}
+
+		.flash-error {
+			background-color: #f8d7da;
+			border-color: #f5c6cb;
+			color: #721c24;
+		}
+
+		.flash-info {
+			background-color: #cce5ff;
+			border-color: #b8daff;
+			color: #004085;
+		}
+
+		@keyframes slideIn {
+			from {
+				transform: translateX(100%);
+				opacity: 0;
+			}
+			to {
+				transform: translateX(0);
+				opacity: 1;
+			}
+		}
+	</style>
+{% endblock %}
+{% block body %}
+	<div
+		class="container">
+		{# Flash Messages #}
+		<div class="flash-messages">
+			{% for label, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="flash-message flash-{{ label }} alert alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+			{% endfor %}
+		</div>
+		{# Filter Toggle Button #}
+		<button class="filter-toggle-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
+			<i class="fas fa-chevron-right"></i>
+		</button>
+
+		{# Filter Sidebar #}
+		<div class="offcanvas offcanvas-start" tabindex="-1" id="filterSidebar">
+			<div class="offcanvas-header">
+				<h5 class="offcanvas-title">Filtres</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+			</div>
+			<div class="offcanvas-body">
+				<form method="get" action="{{ path('app_home') }}">
+
+					<div class="mb-3">
+						<label class="form-label">Filtrer par lieu</label>
+						<input type="text" class="form-control" name="lieu" value="{{ currentFilters.lieu ?? '' }}">
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">Recherche par titre</label>
+						<input type="text" class="form-control" name="search" value="{{ currentFilters.search ?? '' }}">
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Date de début</label>
+						<input type="date" class="form-control" name="startDate" value="{{ currentFilters.startDate ?? '' }}">
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">Date de fin</label>
+						<input type="date" class="form-control" name="endDate" value="{{ currentFilters.endDate ?? '' }}">
+					</div>
+
+					<div class="d-grid gap-2">
+						<button type="submit" class="btn btn-primary">
+							<i class="fas fa-search me-2"></i>Appliquer
+						</button>
+						<a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+							Réinitialiser
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		{# Active Filters Display #}
+		{% if currentFilters is defined and currentFilters|filter(v => v != '')|length > 0 %}
+			<div class="mb-4">
+				{% if currentFilters.search %}
+					<span class="badge bg-info filter-badge">
+						<i class="fas fa-search me-1"></i>
+						{{ currentFilters.search }}
+					</span>
+				{% endif %}
+				{% if currentFilters.lieu %}
+					<span class="badge bg-primary filter-badge">
+						<i class="fas fa-map-marker-alt me-1"></i>
+						{{ currentFilters.lieu }}
+					</span>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{# Translation Controls - Fix container placement #}
+		<div class="translate-all-container mb-4">
+			<select id="global-translate-lang" class="form-select w-auto d-inline-block">
+				<option value="fr">Français</option>
+				<option value="en">English</option>
+				<option value="ar">العربية</option>
+				<option value="es">Español</option>
+				<option value="de">Deutsch</option>
+			</select>
+			<button id="translate-all-btn" class="btn btn-outline-secondary ms-2">Translate All Posts</button>
+			<button id="show-original-all-btn" class="btn btn-outline-secondary ms-2 d-none">Show All Originals</button>
+		</div>
+
+		{# Posts Grid #}
+		<div class="row">
+			{% for post in posts %}
+				<div class="col-md-4 mb-4">
+					<div class="card">
+						<div class="card-header d-flex align-items-center">
+							{% if post.user.image %}
+								<img src="{{ asset('uploads/' ~ post.user.image) }}" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+							{% else %}
+								<img src="{{ asset('assets/images/default-profile.png') }}" class="rounded-circle me-2" alt="Default Profile Picture" style="width: 40px; height: 40px;">
+							{% endif %}
+							<span class="fw-bold">{{ post.user.nom }}</span>
+							<!-- Use email or nom instead of username -->
+						</div>
+						{% if post.image %}
+							<img src="{{ asset('uploads/images/' ~ post.image) }}" class="card-img-top" alt="{{ post.title }}">
+						{% endif %}
+
+						<div class="card-body">
+							<h5 class="card-title">{{ post.lieu }}</h5>
+							<h5 class="card-title">{{ post.title }}</h5>
+							<!-- Instead of inline translate controls, store full content in a data attribute -->
+							<p class="card-text" data-full-content="{{ post.content }}">
+								{{ post.content|slice(0, 100) }}...
+							</p>
+							<small class="text-muted">
+								publié sur
+								{{ post.createdAt|date_modify("+1 hour")|date('Y-m-d H:i') }}
+							</small>
+							<div
+								class="d-flex align-items-center mb-3">
+								<!-- Like Button -->
+								<button class="btn-like" data-post-id="{{ post.id }}" style="background: none; border: none; cursor: pointer;">
+									<i class="like-icon {{ post.likedByUser ? 'fas fa-heart' : 'far fa-heart' }}" style="font-size: 24px; color: {{ post.likedByUser ? 'red' : 'black' }};"></i>
+								</button>
+
+								<span class="ms-2 like-count">{{ post.likes }}</span>
+								<!-- Spacer -->
+								<span class="mx-3"></span>
+								<!-- Comment Button -->
+								<button class="btn-comment" data-post-id="{{ post.id }}" style="background: none; border: none; cursor: pointer;">
+									<i class="far fa-comment" style="font-size: 24px; color: black;"></i>
+								</button>
+								<span class="ms-2 comment-count">{{ post.comments|length }}</span>
+								<!-- GPS Button -->
+								<button class="btn-gps ms-3" data-lat="36.806389" data-lng="10.181667" title="Show location" style="background: none; border: none; cursor: pointer;">
+									<i class="fas fa-map-marker-alt" style="font-size: 24px; color: #4CAF50;"></i>
+								</button>
+							</div>
+							<!-- Comment Input Section -->
+							<div id="comment-section-{{ post.id }}" style="display: none;">
+								<form id="comment-form-{{ post.id }}" action="{{ path('post_comment', {'id': post.id}) }}" method="post" class="comment-form">
+									<div id="error-messages-{{ post.id }}" class="error-messages"></div>
+									{# Container for error messages #}
+
+									{{ form_start(commentForms[post.id], {'attr': {'novalidate': 'novalidate'}}) }}
+									<input type="hidden" id="comment2-input-{{ post.id }}" name="post_id" value="{{ post.id }}">
+									<div class="mb-3">
+										{{ form_widget(commentForms[post.id].content, {
+                'attr': {'class': 'form-control rounded-3 shadow-sm', 'placeholder': 'Tapez votre commentaire...', 'rows': '3', 'style': 'padding-right: 40px;', 'id': 'comment_content_' ~ post.id}
+            }) }}
+									</div>
+									<button type="button" class="btn btn-secondary btn-sm rounded-3 shadow-sm" onclick="startVoiceInput({{ post.id }})">
+										<i class="fas fa-microphone"></i>
+										Voice Input
+									</button>
+									<button type="submit" class="btn btn-primary btn-sm rounded-3 shadow-sm">
+										<i class="fas fa-paper-plane"></i>
+										Post Comment
+									</button>
+
+									{{ form_end(commentForms[post.id]) }}
+								</form>
+
+								{# Inside card-body, after comment input section #}
+								<div class="comments-list mt-2" id="comments-{{ post.id }}">
+									{% for comment in post.comments %}
+										<div class="comment-item small mb-2 d-flex justify-content-between align-items-center">
+											<div class="d-flex align-items-center">
+												{% if comment.user.image %}
+													<img src="{{ asset('uploads/' ~ comment.user.image) }}" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+												{% else %}
+													<img src="{{ asset('assets/images/default-profile.png') }}" class="rounded-circle me-2" alt="Default Profile Picture" style="width: 30px; height: 30px;">
+												{% endif %}
+												<div>
+													<span class="fw-bold">{{ comment.user.nom }}</span>
+													<br>
+													<span id="comment-content-{{ comment.id }}">
+														({{ comment.createdAt|date_modify("+1 hour")|date('Y-m-d H:i') }}) :
+														{{ comment.content }}
+													</span>
+												</div>
+
+											</div>
+
+											<div>
+												{% if user and user.id == comment.user.id %}
+													<!-- Edit Button -->
+													<button class="emoji-button" onclick="editComment({{ comment.id }}, '{{ comment.content }}')">✏️</button>
+
+													<!-- Delete Form -->
+													<form action="{{ path('comment_delete', {'id': comment.id}) }}" method="post" class="d-inline comment-delete-form">
+														<input type="hidden" name="_method" value="DELETE">
+														<button type="submit" class="emoji-button">🗑</button>
+													</form>
+												{% endif %}
+											</div>
+										</div>
+										<form id="edit-form-{{ comment.id }}" action="{{ path('comment_update', {'id': comment.id}) }}" method="post" class="mt-2 d-none">
+											<input type="text" name="content" id="edit-input-{{ comment.id }}" class="form-control" value="{{ comment.content }}">
+											<button type="submit" class="btn btn-sm btn-success mt-1">💾 Sauvgarder</button>
+											<button type="button" class="btn btn-sm btn-secondary mt-1" onclick="cancelEdit({{ comment.id }})">❌ Annuler</button>
+										</form>
+									{% endfor %}
+								</div>
+
+							</div>
+							{% if user and user.id == post.user.id %}
+								<div class="d-flex gap-2 mt-3">
+									<a href="{{ path('app_editPost', {id: post.id}) }}" class="btn btn-success">Modifier</a>
+									<a href="{{ path('app_deletePost', {id: post.id}) }}" class="btn btn-danger delete-btn" data-post-title="{{ post.title }}">Supprimer</a>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div id="postMap" style="height: 400px; width: 100%; display: none; margin-top: 20px;"></div>
+	<div class="map-overlay"></div>
+	<div class="map-modal">
+		<div class="map-header">
+			<h5 class="mb-0">Post Location</h5>
+			<button class="map-close">&times;</button>
+		</div>
+		<div id="mapContainer"></div>
+	</div>
+	<div class="chatbot-container">
+		<button id="chatbot-toggle" class="chatbot-toggle-btn">
+			<i class="fas fa-robot"></i>
+		</button>
+		<div id="chatbot-window" class="chatbot-window">
+			<div class="chatbot-header">
+				<h5>Chatbot AI</h5>
+				<button id="chatbot-close" class="chatbot-close-btn">&times;</button>
+			</div>
+			<div id="chatbot-messages" style="height: 290px !important;overflow-y: scroll;" class="chatbot-messages"></div>
+			<div class="chatbot-input">
+				<input type="text" id="chatbot-input" placeholder="Type your message..."/>
+				<button id="chatbot-send">
+					<i class="fas fa-paper-plane"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="{{ asset('assets/js/dialog.js') }}"></script>
+	<script src="{{ asset('assets/js/likes.js') }}"></script>
+	<!-- Add this inline script for comment toggle -->
+	<script>
+	document.addEventListener('DOMContentLoaded', () => {
+    // Comment toggle functionality
+    document.querySelectorAll('.btn-comment').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const postId = e.currentTarget.dataset.postId;
+            const commentSection = document.getElementById(`comment-section-${postId}`); // Correction ici
+            if (commentSection) {
+                commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+    });
+});
+	</script>
+	<script>
+		function editComment(commentId, currentContent) {
+document.getElementById('comment-content-' + commentId).style.display = 'none';
+document.getElementById('edit-form-' + commentId).classList.remove('d-none');
+}
+
+function cancelEdit(commentId) {
+document.getElementById('comment-content-' + commentId).style.display = 'block';
+document.getElementById('edit-form-' + commentId).classList.add('d-none');
+}
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () { // Delete confirmation
+document.querySelectorAll('.delete-btn').forEach(button => {
+button.addEventListener('click', function (e) {
+e.preventDefault();
+const postTitle = this.dataset.postTitle;
+const deleteUrl = this.href;
+Swal.fire({
+title: Tu veux supprimer "${postTitle}"?,
+icon: "warning",
+showCancelButton: true,
+confirmButtonColor: "#3085d6",
+cancelButtonColor: "#d33",
+confirmButtonText: "Oui, supprimer!",
+cancelButtonText: "Annuler" // <-- This is the line that changes the cancel button text
+}).then((result) => {
+if (result.isConfirmed) {
+window.location.href = deleteUrl;
+}
+});
+});
+});
+
+
+});
+	</script>
+
+
+	<script>
+		// Rotate the arrow icon when the sidebar is toggled
+document.addEventListener('DOMContentLoaded', () => {
+const filterToggleBtn = document.querySelector('.filter-toggle-btn');
+const filterIcon = filterToggleBtn.querySelector('i');
+
+filterToggleBtn.addEventListener('click', () => {
+filterIcon.classList.toggle('fa-chevron-right');
+filterIcon.classList.toggle('fa-chevron-left');
+});
+});
+	</script>
+
+
+	<script>
+		// Function to start voice input
+function startVoiceInput(postId) {
+    console.log('Démarrage de la reconnaissance vocale pour le post ID:', postId);
+
+    if (!('webkitSpeechRecognition' in window)) {
+        alert('Votre navigateur ne supporte pas la reconnaissance vocale.');
+        return;
+    }
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'fr-FR';
+    console.log("Reconnaissance démarrée...");
+    recognition.start();
+    const voiceButton = document.querySelector(`button[onclick="startVoiceInput(${postId})"]`);
+    
+        voiceButton.innerHTML = '<i class="fas fa-microphone"></i> Écoute...';
+    
+       
+   
+
+    
+
+
+    recognition.onresult = async (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log("Texte détecté :", transcript);
+
+        const commentInput = document.querySelector(`#comment_content_${postId}`);
+        if (commentInput) {
+            commentInput.value = transcript;
+            console.log("Texte inséré dans l'input !");
+        } else {
+            console.error("Champ de commentaire introuvable !");
+        }
+
+        if (voiceButton) {
+            voiceButton.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
+        }
+    };
+
+    recognition.onend = () => {
+        console.log("Reconnaissance terminée.");
+      
+            voiceButton.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
+        
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Erreur de reconnaissance vocale :", event.error);
+        alert("Erreur : " + event.error);
+        if (voiceButton) {
+            voiceButton.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
+        }
+    };
+}
+
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => { // Loop through all comment forms
+document.querySelectorAll('.comment-form').forEach(form => {
+form.addEventListener('submit', function (event) {
+event.preventDefault(); // Prevent the form from submitting
+
+const postId = this.id.split('-')[2]; // Extract post ID from form ID
+const commentInput = this.querySelector('textarea'); // Get the comment input field
+const errorMessages = document.getElementById (error-messages-${postId});
+// Get the error message container
+
+// Clear previous error messages
+errorMessages.innerHTML = '';
+
+// Check if the comment is empty
+if (! commentInput.value.trim()) { // Display an error message
+errorMessages.innerHTML = '<div class="alert alert-danger">Le commentaire ne peut pas être vide.</div>';
+
+// Remove the error message after 2 seconds
+setTimeout(() => {
+errorMessages.innerHTML = '';
+}, 2000); // 2000 milliseconds = 2 seconds
+
+return; // Stop further execution
+}
+
+// If the comment is not empty, submit the form
+this.submit();
+});
+});
+});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+const chatbotToggle = document.getElementById('chatbot-toggle');
+const chatbotWindow = document.getElementById('chatbot-window');
+const chatbotClose = document.getElementById('chatbot-close');
+const chatbotSend = document.getElementById('chatbot-send');
+const chatbotInput = document.getElementById('chatbot-input');
+const chatbotMessages = document.getElementById('chatbot-messages');
+
+// Toggle chatbot window
+chatbotToggle.addEventListener('click', () => {
+chatbotWindow.style.display = chatbotWindow.style.display === 'block' ? 'none' : 'block';
+});
+
+// Close chatbot window
+chatbotClose.addEventListener('click', () => {
+chatbotWindow.style.display = 'none';
+});
+
+// Send message to chatbot
+chatbotSend.addEventListener('click', async () => {
+const userMessage = chatbotInput.value.trim();
+if (userMessage) {
+addMessage(userMessage, 'user');
+chatbotInput.value = '';
+const botResponse = await getBotResponse(userMessage);
+addFormattedMessage(botResponse);
+}
+});
+
+function addMessage(message, sender) {
+const messageElement = document.createElement('div');
+messageElement.classList.add('message', sender);
+messageElement.textContent = message;
+chatbotMessages.appendChild(messageElement);
+chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function addFormattedMessage(response) {
+const messageElement = document.createElement('div');
+messageElement.classList.add('message', 'bot');
+
+// Format the response
+const formattedResponse = response.split(/(\d+\.\s*\*\*Title:\*\*)/).map((part, index) => {
+if (index === 0) 
+return part;
+
+
+
+// First part before any numbers
+
+// Format each post entry
+return part.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/(\d+\.)/g, '<br>$1').replace(/\n/g, '<br>');
+}).join('');
+
+messageElement.innerHTML = formattedResponse;
+chatbotMessages.appendChild(messageElement);
+chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+async function getBotResponse(userMessage) {
+try {
+const response = await fetch('/chatbot', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+},
+body: `message=${
+encodeURIComponent(userMessage)
+}`
+});
+
+if (! response.ok) {
+throw new Error (`HTTP error! Status: ${
+response.status
+}`);
+}
+
+const data = await response.json();
+return data.response;
+} catch (error) {
+console.error('Error fetching bot response:', error);
+return 'Sorry, I am unable to respond at the moment.';
+}
+}
+});
+	</script>
+	<script>
+		// Add auto-dismiss for flash messages
+document.addEventListener('DOMContentLoaded', () => {
+const flashMessages = document.querySelectorAll('.flash-message');
+flashMessages.forEach(message => {
+setTimeout(() => {
+message.classList.remove('show');
+setTimeout(() => message.remove(), 150);
+}, 5000);
+});
+});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+function handleTranslation(button) {
+try { // Try to get the parent element with class 'card-text'; fallback to button's parent if not found
+const contentEl = button.closest('.card-text') || button.parentElement;
+if (! contentEl) {
+throw new Error('Content element not found');
+}
+const postId = button.dataset.postId;
+const content = button.dataset.content;
+const langSelect = contentEl.querySelector('.translate-lang');
+if (! langSelect) {
+throw new Error('Language selector not found');
+}
+const targetLang = langSelect.value;
+// Store the original content HTML
+const originalContent = contentEl.innerHTML;
+
+// Show loading state
+button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Translating...';
+button.disabled = true;
+
+// Make the translation request
+fetch('/translate-post', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(
+{content: content, targetLang: targetLang}
+)
+}).then(response => {
+if (!response.ok) 
+throw new Error('Network response was not ok');
+
+
+
+return response.json();
+}).then(data => {
+if (data.error) 
+throw new Error(data.error);
+
+
+
+// Build new content while preserving the container
+const translatedContent = `
+                    <div class="translation-content">${
+data.translation
+}</div>
+                    <div class="d-inline-flex align-items-center mt-2">
+                        <select class="form-select form-select-sm me-2 translate-lang" style="width: auto;">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                            <option value="es">Español</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                        <button class="btn btn-sm btn-outline-secondary translate-btn"
+                                data-post-id="${postId}"
+                                data-content="${content}"
+                                data-original="${
+encodeURIComponent(originalContent)
+}">
+                            <i class="fas fa-language"></i> Show Original
+                        </button>
+                    </div>`;
+// Update the inner HTML of the container
+contentEl.innerHTML = translatedContent;
+initializeTranslationHandlers();
+}).catch(error => {
+console.error('Translation error:', error);
+button.innerHTML = '<i class="fas fa-language"></i> Translation failed';
+Swal.fire({icon: 'error', title: 'Translation Failed', text: error.message});
+}). finally(() => {
+button.disabled = false;
+});
+} catch (error) {
+console.error('Translation handling error:', error);
+Swal.fire({icon: 'error', title: 'Error', text: error.message});
+}
+}
+
+function handleShowOriginal(button) {
+try {
+const contentEl = button.closest('.card-text') || button.parentElement;
+if (! contentEl) {
+throw new Error('Content element not found');
+}
+const originalContent = decodeURIComponent(button.dataset.original);
+contentEl.innerHTML = originalContent;
+initializeTranslationHandlers();
+} catch (error) {
+console.error('Show original error:', error);
+Swal.fire({icon: 'error', title: 'Error', text: error.message});
+}
+}
+
+function initializeTranslationHandlers() {
+document.querySelectorAll('.translate-btn').forEach(button => {
+button.addEventListener('click', function (e) {
+e.preventDefault();
+if (this.dataset.original) {
+handleShowOriginal(this);
+} else {
+handleTranslation(this);
+}
+});
+});
+}
+
+// Initial setup
+initializeTranslationHandlers();
+});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+const translateAllBtn = document.getElementById('translate-all-btn');
+const showOriginalAllBtn = document.getElementById('show-original-all-btn');
+const globalLangSelect = document.getElementById('global-translate-lang');
+
+// Function to translate a single element using your endpoint
+async function translateElement(el, targetLang) {
+const originalContent = el.getAttribute('data-full-content');
+try {
+const response = await fetch('/translate-post', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(
+{content: originalContent, targetLang: targetLang}
+)
+});
+if (! response.ok) 
+throw new Error('Network response was not ok');
+
+
+const data = await response.json();
+if (data.error) 
+throw new Error(data.error);
+
+
+// Save original content into a data attribute in case we want to revert later
+el.setAttribute('data-original', originalContent);
+// Replace the element's content with the translation
+el.innerHTML = data.translation;
+} catch (error) {
+console.error('Translation error for an element:', error);
+// Optionally, show error feedback
+}
+}
+
+// Handler for Translate All Posts
+translateAllBtn.addEventListener('click', async (e) => {
+e.preventDefault();
+const targetLang = globalLangSelect.value;
+const postElements = document.querySelectorAll('.card-text[data-full-content]');
+// Optionally disable the button during translation
+translateAllBtn.disabled = true;
+for (const el of postElements) {
+await translateElement(el, targetLang);
+}
+// Show "Show All Originals" button after translation
+showOriginalAllBtn.classList.remove('d-none');
+translateAllBtn.disabled = false;
+});
+
+// Handler for restoring original text in all posts
+showOriginalAllBtn.addEventListener('click', (e) => {
+e.preventDefault();
+const postElements = document.querySelectorAll('.card-text[data-original]');
+postElements.forEach(el => {
+const original = el.getAttribute('data-original');
+if (original) {
+el.innerHTML = original.slice(0, 100) + '...';
+}
+});
+// Hide the "Show All Originals" button again
+showOriginalAllBtn.classList.add('d-none');
+});
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Select all textareas with names starting with "comment[content]"
+    const textareas = document.querySelectorAll('textarea[name^="comment[content]"]');
+    
+    // Loop through each textarea and set the id dynamically based on the postId
+    textareas.forEach(textarea => {
+        // Get the parent form's ID, which is in the form comment-form-<postId>
+        const postId = textarea.closest('form').id.split('-')[2];  // Extract post ID from form ID
+        
+        // Set the id dynamically using the extracted postId
+        textarea.id = `comment_content_${postId}`;  // Correctly set the ID
+
+    });
+});
+
+	</script>
+{% endblock %}

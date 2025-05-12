@@ -1,0 +1,126 @@
+{# templates/admin/listPostAdmin.html.twig #}
+{% extends 'base3.html.twig' %}
+
+{% block title %}Admin - Posts{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
+    <style></style>
+{% endblock %}
+{% block body %}
+
+    <div class="container">
+        {% for message in app.flashes('message') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        
+        <h2 class="mb-4">Liste des Posts (Admin)</h2>
+
+        <div class="row">
+            {% for post in posts %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% if post.image %}
+                            <img src="{{ asset('uploads/images/' ~ post.image) }}" class="card-img-top" alt="{{ post.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.content|slice(0, 100) }}...</p>
+                            
+                            <div class="d-flex gap-2">
+                                <a href="{{ path('delete_post', {id: post.id}) }}" class="btn btn-danger delete-btn" data-post-title="{{ post.title }}">
+                                    Supprimer
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments Section -->
+                        <div class="card-footer">
+                            <h6>Commentaires :</h6>
+                            <ul class="list-group">
+                                {% for comment in post.comments %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ comment.content }}
+                                        <a href="{{ path('delete_comment', {id: comment.id}) }}" class="btn btn-sm btn-danger delete-comment-btn" data-comment-id="{{ comment.id }}">
+                                            Supprimer
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="list-group-item text-muted">Aucun commentaire</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Confirmation de suppression de post
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const postTitle = this.dataset.postTitle;
+                const deleteUrl = this.href;
+
+                Swal.fire({
+                    title: `Voulez-vous vraiment supprimer "${postTitle}" ?`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Oui, supprimer !",
+                    cancelButtonText: "Annuler"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = deleteUrl;
+                    }
+                });
+            });
+        });
+
+        // Confirmation de suppression de commentaire
+       document.querySelectorAll('.delete-comment-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const deleteUrl = this.href;
+
+        Swal.fire({
+            title: "Voulez-vous vraiment supprimer ce commentaire ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui, supprimer !",
+            cancelButtonText: "Annuler"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(deleteUrl, {
+                    method: "POST", // Ensures it sends as a form request
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload(); // ✅ Reloads to Symfony's redirected page
+                    } else {
+                        console.error("Error deleting comment.");
+                    }
+                }).catch(error => console.error("Fetch error:", error));
+            }
+        });
+    });
+});
+
+    });
+    </script>
+{% endblock %}

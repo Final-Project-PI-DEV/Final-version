@@ -1,0 +1,218 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Loisir{% endblock %}
+
+{% block body %}
+
+<style>
+.generating {
+    position: relative;
+    opacity: 0.7;
+}
+.generating::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+}
+.generate-button-container {
+    margin: 1rem 0;
+}
+
+.spinner-border {
+    vertical-align: middle;
+}
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 2.5rem;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    .form-title {
+        font-size: 2rem;
+        color: #4361ee;
+        font-weight: 700;
+        letter-spacing: -1px;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-title::before,
+    .form-title::after {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        left: 0;
+        background-color:  #FF883B;
+    }
+
+    .form-title::after {
+        animation: pulse 1.5s linear infinite;
+    }
+
+    .form-row {
+        position: relative;
+        margin-bottom: 1.2rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 15px 10px 5px 10px;
+        border: 1px solid rgba(105, 105, 105, 0.3);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color:  #FF883B;
+        box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+
+    .form-label {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        font-size: 1rem;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus + .form-label,
+    .form-input:not(:placeholder-shown) + .form-label {
+        top: 12px;
+        font-size: 0.8rem;
+        color:  #FF883B;
+    }
+
+    .form-button {
+        width: 100%;
+        padding: 12px;
+        background:  #FF883B;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .form-button:hover {
+        background:  #FF883B;
+    }
+
+    .back-link {
+        text-align: center;
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .back-link a {
+        color:  #FF883B;
+        text-decoration: none;
+    }
+
+    .back-link a:hover {
+        text-decoration: underline;
+    }
+
+    @keyframes pulse {
+        from { transform: scale(0.9); opacity: 1; }
+        to { transform: scale(1.8); opacity: 0; }
+    }
+</style>
+   
+
+
+
+
+<div class="form-container">
+    <h1 class="form-title">Nouveau Loisir</h1>
+
+    {{ form_start(form) }}
+        {% for child in form.children %}
+            <div class="form-row">
+                {{ form_widget(child, {'attr': {'class': 'form-input', 'placeholder': ' '}}) }}
+                {{ form_label(child, null, {'label_attr': {'class': 'form-label'}}) }}
+            </div>
+        {% endfor %}
+
+        <button class="form-button">{{ button_label|default('Créer') }}</button>
+    {{ form_end(form) }}
+
+    <p class="back-link">Retour à la <a href="{{ path('app_loisir_index') }}">liste des loisirs</a></p>
+</div>
+{% block javascripts %}
+<script>
+document.querySelectorAll('.generate-description-btn').forEach(button => {
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        const form = e.target.closest('form');
+        const name = form.querySelector('[name="loisir[name]"]').value;
+        const descriptionField = form.querySelector('[name="loisir[description]"]');
+
+        if (!name) {
+            alert('Veuillez saisir un nom');
+            return;
+        }
+
+        const originalText = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = button.dataset.loadingText;
+
+        try {
+            const response = await fetch('{{ path('loisir_generate_description') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Identifie la requête AJAX
+                },
+                body: JSON.stringify({
+                    item_name: name,
+                    characteristics: characteristics.split(',').map(c => c.trim())
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            if (data.description) {
+                descriptionField.value = data.description;
+            } else {
+                alert(data.error || 'Erreur inconnue');
+            }
+            
+        } catch (error) {
+            console.error(error);
+            alert('Service indisponible : ' + error.message);
+        } finally {
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

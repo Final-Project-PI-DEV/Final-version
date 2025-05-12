@@ -1,0 +1,89 @@
+/* assets/styles/app.css */
+.card {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+    border: 1px solid #eee;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+.card-img-top {
+    transition: transform 0.3s ease;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.01);
+}
+
+.btn-like, .btn-comment {
+    transition: transform 0.2s ease;
+}
+
+.btn-like:hover, .btn-comment:hover {
+    transform: scale(1.1);
+}
+
+.map-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.map-modal.active {
+    display: block;
+    opacity: 1;
+}
+
+.map-header {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.map-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+#mapContainer {
+    height: 400px;
+   width: 100%;
+}
+
+.map-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: none;
+}
+/* In app.css */
+.comment-section {
+    border: 2px solid red !important; /* Visual indicator */
+    position: relative;
+    z-index: 1000;
+    background: white;
+}

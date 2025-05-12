@@ -1,0 +1,5 @@
+framework:
+    assets:
+        packages:
+            shared_images:
+                base_path: 'file:/C:/shared_image/'

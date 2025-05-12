@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Réservations{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --secondary-orange: #2ecc71;
+            --light-bg: #f9f9f9;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* En-tête poétique et affirmé */
+        .header {
+            background-image: linear-gradient(135deg, var(--primary-green), var(--secondary-orange));
+            padding: 100px 0;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+        }
+        .header p {
+            font-size: 1.25rem;
+            margin-top: 10px;
+        }
+
+        /* Conteneur du tableau */
+        .table-container {
+            max-width: 1200px;
+            margin: auto;
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background-color: var(--primary-green);
+            color: #fff;
+        }
+        th, td {
+            padding: 15px 20px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            vertical-align: middle;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+        tbody tr:hover {
+            background-color: #e9f5e9;
+        }
+        .event-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            color: #fff;
+        }
+        .btn-info {
+            background-color: var(--primary-green);
+        }
+        .btn-info:hover {
+            background-color: #27ae60;
+        }
+        .btn-cancel {
+            background-color: var(--secondary-orange);
+        }
+        .btn-cancel:hover {
+            background-color: #d35400;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+{{include('reclamation/index1.html.twig')}}
+
+    <div class="container table-container">
+        {% if events|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Titre</th>
+                        <th>Type</th>
+                        <th>Lieu</th>
+                        <th>Date</th>
+                        <th>Prix</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>
+                                {% if event.image %}
+                                    <img src="{{ asset('uploads/images/' ~ event.image) }}" alt="{{ event.titre }}" class="event-img">
+                                {% else %}
+                                    <div class="event-img" style="background-color: #eee; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-calendar-alt" style="color: #bbb;"></i>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ event.titre }}</td>
+                            <td>{{ event.typeevent }}</td>
+                            <td>{{ event.lieu }}</td>
+                            <td>{{ event.dateDebut|date('d/m/Y H:i') }}</td>
+                            <td>{{ event.prix }} DT</td>
+                            <td>
+                                <a href="{{ path('app_events_show', {'id': event.id}) }}" class="btn btn-info">
+                                    Détails
+                                </a>
+                                <a href="{{ path('app_remove_reservation', {'id': event.id}) }}" class="btn btn-cancel" onclick="return confirm('Annuler cette réservation ?')">
+                                    Annuler
+                                </a>
+                                <a href="{{ path('ajouter_au_panier', {'type': 'events', 'id': event.id}) }}" class="btn btn-info">
+                                Ajouter au panier
+                            </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty" style="text-align: center; padding: 60px;">
+                <i class="fas fa-calendar-times" style="font-size: 4rem; color: var(--secondary-orange);"></i>
+                <h2>Aucune réservation enregistrée</h2>
+                <p>Laissez le vent du changement vous guider vers de nouvelles expériences.</p>
+                <a href="{{ path('app_events_index') }}" class="btn btn-info">
+                    Voir les événements disponibles
+                </a>
+               
+            </div>
+        {% endif %}
+    </div>
+   
+{% endblock %}
+

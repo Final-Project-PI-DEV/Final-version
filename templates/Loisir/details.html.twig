@@ -1,0 +1,383 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ loisir.name }}{% endblock %}
+
+{% block body %}
+<style>
+    .detail-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .detail-title {
+        font-size: 2rem;
+        color:  #FF883B;
+        margin: 0;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .detail-item {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .detail-value {
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .image-container {
+        text-align: center;
+        margin: 2rem 0;
+    }
+
+    .loisir-image {
+        max-width: 300px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .action-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+    }
+
+    /* Styles des boutons */
+    .button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color:  #FF883B;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .button:hover {
+        width: 140px;
+        border-radius: 50px;
+    }
+
+    .button.back {
+        background-color: #6c757d;
+    }
+
+    .button.edit {
+        background-color  #FF883B;
+    }
+
+    .button.delete {
+        background-color: #dc3545;
+    }
+
+    .button svg {
+        width: 20px;
+        height: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .button:hover svg {
+        transform: translateY(-60%);
+    }
+
+    .button::before {
+        position: absolute;
+        top: 50%;
+        transform: translateY(calc(-50% + 20px));
+        color: white;
+        font-size: 0;
+        opacity: 0;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .button.back:hover::before {
+        content: "Retour";
+        font-size: 14px;
+        opacity: 1;
+        transform: translateY(-50%);
+    }
+
+    .button.edit:hover::before {
+        content: "Modifier";
+        font-size: 14px;
+        opacity: 1;
+        transform: translateY(-50%);
+    }
+
+    .button.delete:hover::before {
+        content: "Supprimer";
+        font-size: 14px;
+        opacity: 1;
+        transform: translateY(-50%);
+    }
+</style>
+
+<div class="detail-container">
+    <div class="detail-header">
+        <h1 class="detail-title">{{ loisir.name }}</h1>
+        <a href="{{ path('clientL') }}" class="button back">
+            <svg viewBox="0 0 24 24" fill="white">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+        </a>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <span class="detail-label">Nom</span>
+            <div class="detail-value">{{ loisir.name }}</div>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Type</span>
+            <div class="detail-value">{{ loisir.type }}</div>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Quantité totale</span>
+            <div class="detail-value">{{ loisir.quantity }}</div>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Quantité disponible</span>
+            <div class="detail-value">{{ loisir.quantityAvailable }}</div>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Prix</span>
+            <div class="detail-value">{{ loisir.price|number_format(2, ',', ' ') }} TND</div>
+        </div>
+
+        <div class="detail-item" style="grid-column: span 2;">
+            <span class="detail-label">Description</span>
+            <div class="detail-value">{{ loisir.description }}</div>
+        </div>
+    </div>
+
+     {% if loisir.Path %}
+    <div class="image-container">
+        <img src="{{ asset('uploads/images/' ~ loisir.Path) }}" 
+             alt="{{ loisir.name }}" 
+             class="material-image">
+    </div>
+    {% endif %}
+</div>
+<!-- footer -->	
+	<!-- Styles améliorés pour un design moderne et centré -->
+<style>
+    .footer-section {
+        background: #222; /* Fond sombre */
+        color: #fff;
+        text-align: center; /* Tout centrer */
+        padding: 50px 0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .footer-section a {
+        color: #FF883B; /* Couleur principale */
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+        color: #fff;
+    }
+
+    .footer-cta {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+    }
+
+    .single-cta {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .single-cta i {
+        font-size: 35px;
+        color: #FF883B;
+    }
+
+    .cta-text h4 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 5px 0;
+    }
+
+    .footer-social-icon {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .footer-social-icon a {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .footer-social-icon a:hover {
+        transform: scale(1.2);
+    }
+
+    .social-icon {
+        width: 45px;
+        height: auto;
+    }
+
+    .subscribe-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .subscribe-form input {
+        width: 250px;
+        padding: 12px;
+        border: none;
+        border-radius: 30px;
+        outline: none;
+        text-align: center;
+    }
+
+    .subscribe-form button {
+        background: #FF883B;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-weight: bold;
+    }
+
+    .subscribe-form button:hover {
+        background: #e6722c;
+    }
+
+    .footer-bottom {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        .footer-cta {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .subscribe-form {
+            flex-direction: column;
+        }
+
+        .subscribe-form input {
+            width: 100%;
+        }
+    }
+</style>
+
+<footer id="footer" class="footer-section">
+    <div class="container">
+        <!-- Contact Info -->
+        <div class="footer-cta">
+            <div class="single-cta">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="cta-text">
+                    <h4>Find us</h4>
+                    <span>Ariana - Tunis </span>
+                </div>
+            </div>
+            <div class="single-cta">
+                <i class="fas fa-phone"></i>
+                <div class="cta-text">
+                    <h4>Call us</h4>
+                    <span>+216 50 854 702</span>
+                </div>
+            </div>
+            <div class="single-cta">
+                <i class="far fa-envelope-open"></i>
+                <div class="cta-text">
+                    <h4>Mail us</h4>
+                    <span>rahal@infos.com</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Content -->
+        <div class="footer-content">
+            <!-- Social Media -->
+            <div class="footer-social-icon">
+                <a href="https://www.facebook.com/profile.php?id=61572387456427" target="_blank">
+                    <img src="assets/images/facebook11.png" alt="Facebook" class="social-icon">
+                </a>
+                <a href="https://www.instagram.com/rahalla.tn/?hl=ar" target="_blank">
+                    <img src="assets/images/instagram2.png" alt="Instagram" class="social-icon">
+                </a>
+            </div>
+
+            <!-- Subscription -->
+            <div class="footer-widget-heading">
+                <h3>Subscribe</h3>
+            </div>
+            <p>Don’t miss our latest updates! Enter your email below.</p>
+            <form class="subscribe-form">
+                <input type="email" placeholder="Your Email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 All Rights Reserved | Designed with ❤️</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

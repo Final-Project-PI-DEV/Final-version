@@ -1,0 +1,235 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block body %}
+{{include('reclamation/index1.html.twig')}}
+	<style>:root
+	{
+		--primary-color: #FF883B;
+		--hover-color: rgb(202, 83, 4);
+		--background-color: #f8f9fa;
+		--card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+		--transition: all 0.3s ease;
+	}
+
+	body {
+		background: var(--background-color);
+	}
+
+	h1 {
+		color: white;
+		background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+		padding: 2rem;
+		border-radius: 15px;
+		text-align: center;
+		margin-bottom: 2rem;
+		box-shadow: var(--card-shadow);
+	}
+
+	.panier-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+
+	.category-section {
+		margin-bottom: 2.5rem;
+		background: white;
+		border-radius: 15px;
+		box-shadow: var(--card-shadow);
+		overflow: hidden;
+	}
+
+	.category-title {
+		padding: 1.5rem;
+		margin: 0;
+		background: var(--primary-color);
+		color: white;
+		font-size: 1.4rem;
+	}
+
+	.items-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.item-card {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1.5rem;
+		border-bottom: 1px solid #eee;
+		transition: var(--transition);
+	}
+
+	.item-card:hover {
+		background: #f8f9fa;
+	}
+
+	.item-info {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		flex: 1;
+	}
+
+	.item-name {
+		font-weight: 500;
+		color: #333;
+	}
+
+	.item-quantity {
+		color: #666;
+		font-size: 0.9em;
+	}
+
+	.item-actions {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.item-price {
+		color: var(--primary-color);
+		font-weight: bold;
+		min-width: 100px;
+		text-align: right;
+	}
+
+	.btn-danger {
+		color: #dc3545;
+		padding: 0.5rem 1rem;
+		border-radius: 8px;
+		transition: var(--transition);
+		border: none;
+		background: none;
+		cursor: pointer;
+	}
+
+	.btn-danger:hover {
+		background: rgba(220, 53, 69, 0.1);
+	}
+
+	.total-section {
+		background: white;
+		padding: 2rem;
+		border-radius: 15px;
+		margin-top: 2rem;
+		box-shadow: var(--card-shadow);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 1.5rem;
+		font-weight: bold;
+		color: var(--primary-color);
+	}
+
+	.btn-success {
+		display: block;
+		width: 100%;
+		padding: 1.2rem;
+		background: var(--primary-color);
+		color: white;
+		text-align: center;
+		border: none;
+		border-radius: 10px;
+		font-size: 1.1rem;
+		font-weight: 600;
+		text-decoration: none;
+		transition: var(--transition);
+	}
+
+	.btn-success:hover {
+		background: var(--hover-color);
+		transform: translateY(-2px);
+		color: white;
+	}
+
+	@media(max-width: 768px) {
+		.item-card {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+			padding: 1rem;
+		}
+
+		.item-actions {
+			width: 100%;
+			justify-content: space-between;
+		}
+
+		.item-price {
+			text-align: left;
+		}
+	}
+</style>
+
+<div class="panier-container">
+	<h1>Mon Panier</h1>
+
+	{% if panier is empty %}
+		<p>Votre panier est vide.</p>
+	{% else %}
+		<div class="panier-container">
+			{% for typeCategorie, items in panier %}
+				<div class="category-section">
+					<h3 class="category-title">
+						{% if typeCategorie == 'materiel' %}
+							Matériels
+						{% elseif typeCategorie == 'loisir' %}
+							Loisirs
+						{% elseif typeCategorie == 'events' %}
+							Événements
+						{% endif %}
+					</h3>
+
+					<ul class="items-list">
+						{% for itemId, itemData in items %}
+							<li class="item-card">
+								<div class="item-info">
+									<span class="item-name">
+										{% if typeCategorie == 'events' %}
+											{{ itemData.item.titre }}
+										{% else %}
+											{{ itemData.item.name }}
+										{% endif %}
+									</span>
+									<span class="item-quantity">
+										x{{ itemData.quantity }}
+									</span>
+								</div>
+								<div class="item-actions">
+									<span class="item-price">
+										{{ itemData.price|number_format(2, ',', ' ') }}
+										DT
+									</span>
+									<a href="{{ path('supprimer_du_panier', { 'type': typeCategorie, 'id': itemData.item.id }) }}" class="btn btn-danger btn-sm">
+										<i class="fas fa-trash"></i>
+									</a>
+								</div>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="total-section">
+			<h4>Total général :</h4>
+			<span class="total-price">{{ total|number_format(2, ',', ' ') }}
+				DT</span>
+		</div>
+
+		<div class="payment-section mt-4">
+			<a href="{{ path('checkout') }}" class="btn btn-success">
+				<i class="fas fa-credit-card"></i>
+				Payer avec Stripe
+			</a>
+		</div>
+	{% endif %}
+</div>{% endblock %}

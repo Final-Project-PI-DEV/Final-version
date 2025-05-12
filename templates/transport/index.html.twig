@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Campers Dashboard</title>
+		<link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+	</head>
+	<body>
+		<header>
+			<div class="logo" title="University Management System">
+				<img src="{{ asset('assets/images/logo.png') }}" alt="">
+			</div>
+			<div class="navbar">
+				<a href={{path('app_user_index')}} onclick="timeTableAll()">
+					<span class="material-icons-sharp">home</span>
+					<h3>User</h3>
+				</a>
+				<a href="timetable.html" onclick="timeTableAll()">
+					<span class="material-icons-sharp">event_available</span>
+					<h3>RESERVATION</h3>
+				</a>
+				<a href="/restaurant" onclick="timeTableAll()">
+					<span class="material-icons-sharp">restaurant</span>
+					<h3>RESTAURANTS</h3>
+				</a>
+				<a href="/menu">
+					<span class="material-icons-sharp">menu</span>
+					<h3>MENU</h3>
+				</a>
+				<a href="/events">
+					<span class="material-icons-sharp">events</span>
+					<h3>events</h3>
+				</a>
+				<a href="/transport" class="active">
+					<span class="material-icons-sharp">directions_bus</span>
+
+					<h3>transports</h3>
+				</a>
+				<a href="{{path('app_logout')}}">
+					<span class="material-icons-sharp">logout</span>
+					<h3>Logout</h3>
+				</a>
+			</div>
+			<div id="profile-btn">
+				<span class="material-icons-sharp">person</span>
+			</div>
+			<div class="theme-toggler">
+				<span class="material-icons-sharp active">light_mode</span>
+				<span class="material-icons-sharp">dark_mode</span>
+			</div>
+
+		</header>
+		<div class="container">
+			<aside>
+				<div class="profile">
+					<div class="top">
+						<div class="profile-photo">
+							<img src="{{ admin.image ? asset('uploads/' ~ admin.image) : asset('assets/images/default-avatar.png') }}" alt="User Photo">
+						</div>
+						<div class="info">
+							<p>Hey,
+								<b>{{ admin.nom ~ ' ' ~ admin.prenom }}</b>
+							</p>
+							<small class="text-muted">{{ admin.id }}</small>
+						</div>
+					</div>
+					<div class="about">
+						<h5>Role</h5>
+						<p>
+							{# Vous pouvez adapter la logique selon vos critères #}
+							{% if 'ROLE_ADMIN' in admin.roles %}
+								Admin Camper
+							{% else %}
+								Premium Camper
+							{% endif %}
+						</p>
+						<h5>Birthday</h5>
+						<p>{{ admin.dateDeNaissance ? admin.dateDeNaissance|date('d-M-Y') : 'Non renseigné' }}</p>
+						<h5>Contact</h5>
+						<p>{{ admin.telephone }}</p>
+						<h5>Email</h5>
+						<p>{{ admin.email }}</p>
+						<h5>Address</h5>
+						<p>{{ admin.adresse|default('Non renseignée') }}</p>
+					</div>
+				</div>
+			</aside>
+
+			<main>
+				<h1>Participation</h1>
+				<div class="subjects">
+					<div class="eg">
+						<span class="material-icons-sharp">hiking</span>
+						<h3>CAMPING</h3>
+						<h2>12/14</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>86%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="mth">
+						<span class="material-icons-sharp">event_available</span>
+						<h3>RESERVATION</h3>
+						<h2>27/29</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>93%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="cs">
+						<span class="material-icons-sharp">location_city</span>
+						<h3>CENTRE</h3>
+						<h2>27/30</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>81%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="cg">
+						<span class="material-icons-sharp">dns</span>
+						<h3>Database Management</h3>
+						<h2>24/25</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>96%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+					<div class="net">
+						<span class="material-icons-sharp">router</span>
+						<h3>Network Security</h3>
+						<h2>25/27</h2>
+						<div class="progress">
+							<svg>
+								<circle cx="38" cy="38" r="36"></circle>
+							</svg>
+							<div class="number">
+								<p>92%</p>
+							</div>
+						</div>
+						<small class="text-muted">Last 24 Hours</small>
+					</div>
+				</div>
+
+				<div class="timetable" id="timetable">
+					<div>
+						<span id="prevDay">&lt;</span>
+						<h2>Table des Transports</h2>
+						<span id="nextDay">&gt;</span>
+						<div class="text-center mt-5">
+							<a href="{{ path('app_events_new') }}" class="btn btn-primary btn-lg px-5">
+								<i class="fas fa-plus-circle me-2"></i>
+								Create New Transport
+							</a>
+						</div>
+					</div>
+					<span class="closeBtn" onclick="timeTableAll()">X</span>
+					<table>
+						<thead>
+							<tr>
+								<th>Type de transport</th>
+								<th>Heure de début</th>
+								<th>Heure d'arrive</th>
+								<th>nombre d escale
+								</th>
+								<th>nombre de place</th>
+								<th>matricule</th>
+								<th>description</th>
+								<th>nom de l'évenement</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for t in transports %}
+								<tr>
+									<td>{{ t.typetransport }}</td>
+
+									<td>{{ t.heureDepart ? t.heureDepart|date('d/m/Y H:i') : '' }}</td>
+									<td>{{ t.heureArrive ? t.heureArrive|date('d/m/Y H:i') : '' }}</td>
+									<td>{{ t.nbreescale }}</td>
+									<td>{{ t.nbreplace }}</td>
+									<td>{{ t.matricule }}</td>
+									<td>{{ t.description }}</td>
+									<td>{{ t.events.titre }}</td>
+									<td>
+										<div
+											style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+											<!-- Bouton Modifier -->
+											<a href="{{ path('app_transport_edit', {'id': t.id}) }}" class="btn btn-sm btn-primary" style="padding: 6px 12px; border-radius: 5px; text-decoration: none;">
+												<i class="fas fa-edit"></i>
+												Modifier
+											</a>
+
+											<!-- Bouton Supprimer -->
+											<form action="{{ path('app_transport_delete', {'id': t.id}) }}" method="POST" style="margin: 0;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ t.id) }}">
+												<button type="submit" class="btn btn-sm btn-danger" style="padding: 6px 12px; border-radius: 5px;" onclick="return confirm('Êtes-vous sûr ?')">
+													<i class="fas fa-trash"></i>
+													Supprimer
+												</button>
+											</form>
+
+											<!-- Bouton Show -->
+											<a href="{{ path('app_transport_show', {'id': t.id}) }}" class="btn btn-sm btn-success" style="padding: 6px 12px; border-radius: 5px; text-decoration: none;">
+												<i class="fas fa-eye"></i>
+												Voir
+											</a>
+											<style>
+												.btn {
+													transition: all 0.3s ease;
+													display: inline-flex;
+													align-items: center;
+													gap: 6px;
+												}
+
+												.btn-primary {
+													background: #4a90e2;
+													border: 1px solid #357abd;
+												}
+
+												.btn-danger {
+													background: #e63946;
+													border: 1px solid #c5303b;
+												}
+
+												.btn-success {
+													background: #52b788;
+													border: 1px solid #40916c;
+												}
+
+												.btn:hover {
+													transform: translateY(-1px);
+													box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+												}
+
+												.btn-sm {
+													font-size: 0.875rem;
+												}
+
+												.fas {
+													font-size: 0.9rem;
+												}
+											</style>
+										</div>
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="4">No events found for today</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</body>
+			</html>
+		</div>
+		<div class="timetable" id="timetable">
+			<div>
+				<span id="prevDay">&lt;</span>
+
+
+				<div class="text-center mt-5"></div>
+				<span id="nextDay">&gt;</span>
+			</div>
+			<span class="closeBtn" onclick="timeTableAll()">X</span>
+		</div>
+	</body>
+</html></main><div class="right">
+<div class="announcements">
+	<h2>Announcements</h2>
+	<div class="updates">
+		<div class="message">
+			<p>
+				<b>Academic</b>
+				Summer training internship with Live Projects.</p>
+			<small class="text-muted">2 Minutes Ago</small>
+		</div>
+		<div class="message">
+			<p>
+				<b>Co-curricular</b>
+				Global internship oportunity by Student organization.</p>
+			<small class="text-muted">10 Minutes Ago</small>
+		</div>
+		<div class="message">
+			<p>
+				<b>Examination</b>
+				Instructions for Mid Term Examination.</p>
+			<small class="text-muted">Yesterday</small>
+		</div>
+	</div>
+</div>
+<div class="leaves">
+	<h2>Teachers on leave</h2>
+	<div class="teacher">
+		<div class="profile-photo"><img src="{{ asset('assets/images/profile-2.jpeg') }}" alt=""></div>
+		<div class="info">
+			<h3>The Professor</h3>
+			<small class="text-muted">Full Day</small>
+		</div>
+	</div>
+	<div class="teacher">
+		<div class="profile-photo"><img src="{{ asset('assets/images/profile-3.jpg') }}" alt=""></div>
+		<div class="info">
+			<h3>Lisa Manobal</h3>
+			<small class="text-muted">Half Day</small>
+		</div>
+	</div>
+	<div class="teacher">
+		<div class="profile-photo"><img src="{{ asset('assets/images/profile-4.jpg') }}" alt=""></div>
+		<div class="info">
+			<h3>Himanshu Jindal</h3>
+			<small class="text-muted">Full Day</small>
+		</div>
+	</div>
+</div></div></div><script src="{{ asset('assets/js/timeTable.js') }}"></script><script src="{{ asset('assets/js/app.js') }}"></script></body></html>

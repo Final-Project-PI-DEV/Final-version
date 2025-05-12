@@ -1,0 +1,316 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff8c00;  /* Couleur orange */
+            --secondary-color: #f5f5f5;
+            --accent-color: #ffd700;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .form-card {
+            max-width: 800px;  /* Augmentation de la largeur */
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow-y: auto; /* Scroll actif quand nécessaire */
+            max-height: 80vh;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, var(--primary-color), #cc7000);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-header i {
+            margin-right: 12px;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #2d6a4f;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control,
+        .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);  /* Ajout de l'orange lors du focus */
+            background: white;
+        }
+
+        .input-group-text {
+            
+            color: Black;
+            border: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .image-upload-container {
+            border: 2px dashed #e0e0e0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            cursor: pointer;
+        }
+
+        .image-upload-container:hover {
+            border-color: var(--primary-color);
+            background: rgba(255, 140, 0, 0.05);
+        }
+
+        .image-upload-container label {
+            color: var(--primary-color); /* Texte orange */
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .image-preview {
+            max-width: 150px;
+            border-radius: 10px;
+            margin: 1rem auto;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #cc7000);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            width: 100%;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+        }
+
+        .btn-primary i {
+            margin-right: 8px;
+        }
+
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+
+        .is-invalid:focus {
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        @media (max-width: 768px) {
+            .form-card {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .form-header {
+                margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+                padding: 1rem;
+            }
+        }
+
+        /* Espacement spécifique entre le label et le champ "Titre" */
+        .form-group .form-label {
+            margin-top: 10px; /* Espacement entre le titre et le champ */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="form-card">
+            <div class="form-header">
+                <h2><i class="fas fa-calendar-plus"></i>Créer un nouvel événement</h2>
+            </div>
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'}}) }}
+                <div class="row g-4">
+                    <!-- Left Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form_label(form.titre) }}
+                            {{ form_widget(form.titre, {'attr': {'class': 'form-control' ~ (form.titre.vars.valid ? '' : ' is-invalid') }}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.titre) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.typeevent) }}
+                            {{ form_widget(form.typeevent, {'attr': {'class': 'form-control' ~ (form.typeevent.vars.valid ? '' : ' is-invalid') }}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.typeevent) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.film) }}
+                            {{ form_widget(form.film, {'attr': {'class': 'form-control' ~ (form.film.vars.valid ? '' : ' is-invalid') }}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.film) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form_label(form.date_debut) }}
+                            {{ form_widget(form.date_debut, {'attr': {'class': 'form-control flatpickr' ~ (form.date_debut.vars.valid ? '' : ' is-invalid') }}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.date_debut) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.date_fin) }}
+                            {{ form_widget(form.date_fin, {'attr': {'class': 'form-control flatpickr' ~ (form.date_fin.vars.valid ? '' : ' is-invalid') }}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.date_fin) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.prix) }}
+                            <div class="input-group">
+                                {{ form_widget(form.prix, {'attr': {'class': 'form-control' ~ (form.prix.vars.valid ? '' : ' is-invalid') }}) }}
+                                <span class="input-group-text">DT</span>
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.prix) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Width Elements -->
+                    <div class="col-12">
+                        <div class="form-group">
+                            {{ form_label(form.lieu) }}
+                            {{ form_widget(form.lieu, {'attr': {'class': 'form-control' ~ (form.lieu.vars.valid ? '' : ' is-invalid') }}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.lieu) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="image-upload-container">
+                                <label for="{{ form.image.vars.id }}">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i>
+                                    Télécharger l'image
+                                </label>
+                                {{ form_widget(form.image, {'attr': {
+                                    'class': 'form-control',
+                                    'onchange': 'previewImage(this)',
+                                    'hidden': true
+                                }}) }}
+                                <img id="imagePreview" class="image-preview" alt="Aperçu de l'image">
+                                <small class="text-muted">Formats supportés: JPG, PNG, GIF</small>
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.image) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.description) }}
+                            {{ form_widget(form.description, {'attr': {
+                                'class': 'form-control',
+                                'rows': 4
+                            }}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.description) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            {{ button_label|default('Créer l\'événement') }}
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <script>
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.style.display = 'block';
+                preview.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+{% endblock %}

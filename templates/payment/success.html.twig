@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement réussi
+{% endblock %}
+
+{% block body %}
+{{include('reclamation/index1.html.twig')}}
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-md-8 text-center">
+				<div class="alert alert-success">
+					<h2>
+						<i class="fas fa-check-circle"></i>
+						Paiement réussi !</h2>
+					<img src="{{ qrcode }}" alt="success" class="img-fluid" width="200"/>
+					<p class="mt-3">
+						Merci <strong>{{ user_name }} {{ user_last_name }}</strong>  pour votre achat.
+						Votre commande a été traitée avec succès.
+					</p>
+					<a href="{{ path('home11') }}" class="btn btn-primary mt-3">Retour à l'accueil</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

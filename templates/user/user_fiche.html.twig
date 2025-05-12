@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiche Utilisateur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-picture {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-picture img {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #000; /* Contour pour compenser le border-radius */
+        }
+        .details {
+            margin: 20px;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: gray;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Fiche de {{ user.nom }} {{ user.prenom }}</h1>
+    </div>
+
+    <div class="profile-picture">
+        <img src="{{ asset('uploads/' ~ user.image) }}" alt="Photo de {{ user.nom }}">
+    </div>
+
+    <div class="details">
+        <p><strong>Nom :</strong> {{ user.nom }}</p>
+        <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+        <p><strong>Email :</strong> {{ user.email }}</p>
+        <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+    </div>
+
+    <div class="footer">
+        Exporté le : {{ "now"|date("d/m/Y H:i") }}
+    </div>
+
+</body>
+</html>

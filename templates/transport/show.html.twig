@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du transport - {{ transport.typetransport }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff8c00; /* 🎨 Couleur orange */
+            --secondary-color: #ffffff;
+            --dark-color: #cc7000;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+        }
+
+        /* ✅ EN-TÊTE DU TRANSPORT */
+        .transport-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 0 0 50px 50px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .transport-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .transport-header .transport-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1rem;
+        }
+
+        .transport-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 1.5s infinite alternate ease-in-out;
+        }
+
+        /* ✅ CARTES DÉTAILS */
+        .detail-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            margin-right: 1rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+            border-radius: 10px;
+            background: #f9f9f9;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ✅ BOUTONS */
+        .btn-gradient {
+            background: linear-gradient(45deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-gradient i {
+            margin-right: 8px;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(204, 112, 0, 0.3);
+        }
+
+        /* ✅ ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="transport-header">
+        <div class="container">
+            <i class="fas fa-bus transport-icon"></i> <!-- 🚌 Icône de transport animée -->
+            <h1 class="fw-bold mb-3">{{ transport.typetransport }}</h1>
+            <div class="transport-badge">Matricule : {{ transport.matricule }}</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="detail-card">
+            <div class="d-flex align-items-center mb-4">
+                <div class="icon-box">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <h2 class="mb-0">Informations détaillées</h2>
+            </div>
+
+            <div class="info-item">
+                <h5><i class="fas fa-clock me-2"></i>Horaires</h5>
+                <div class="mt-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <small class="text-muted">Départ</small>
+                            <p class="mb-0 fw-bold">{{ transport.heureDepart|date('H:i') }}</p>
+                        </div>
+                        <div>
+                            <small class="text-muted">Arrivée</small>
+                            <p class="mb-0 fw-bold">{{ transport.heureArrive|date('H:i') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <h5><i class="fas fa-chair me-2"></i>Capacité</h5>
+                <div class="mt-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted">Places disponibles</small>
+                            <p class="mb-0 fw-bold h4">{{ transport.nbreplace }}</p>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Nombre d'escales</small>
+                            <p class="mb-0 fw-bold h4">{{ transport.nbreescale }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <h5><i class="fas fa-file-alt me-2"></i>Description</h5>
+                <p class="mt-3 mb-0 text-muted">{{ transport.description }}</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('app_transport_index') }}" class="btn btn-gradient">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+{% endblock %}

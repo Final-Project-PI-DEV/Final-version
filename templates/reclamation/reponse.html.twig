@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Réponse à la Réclamation</title>
+		<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+		<style>
+			.faq {
+				background: rgba(128, 128, 128, 0.49) no-repeat center center;
+				background-size: cover;
+				color: white;
+				padding: 20px;
+			}
+			.title-container {
+				background-color: #ff7b00;
+				color: white;
+				text-align: center;
+				padding: 10px 0;
+				margin-top: 0;
+			}
+			body {
+				background: url('/assets/images/camping2.jpg') no-repeat center center fixed;
+				background-size: cover;
+				background-position: center;
+				background-attachment: fixed;
+				color: white;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Header -->
+		<header id="header" class="header d-flex align-items-center fixed-top">
+			<div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+				<a href="{{ path('create-reclamation') }}" class="logo d-flex align-items-center">
+					<img src="{{ asset('assets/images/logorz1.png') }}" class="logo-img" alt="Logo">
+				</a>
+				<nav id="navmenu" class="navmenu">
+					<ul>
+						<li><a href="#hero" class="active">Home</a></li>
+						<li><a href="#about">About</a></li>
+						<li><a href="#camping-offers">Services</a></li>
+						<li><a href="#footer">Contact</a></li>
+						<li><a href="#footer">Matériels</a></li>
+						<li><a href="#footer">Loisirs</a></li>
+					</ul>
+				</nav>
+				<a class="btn-getstarted" href="{{ path('create-reclamation') }}">Get Started</a>
+			</div>
+		</header>
+		<div class="title-container">
+			<h1>Réponses aux Utilisateurs – Suivi et Assistance</h1>
+		</div>
+		<!-- Formulaire -->
+		<div class="container mt-4">
+			<div class="row justify-content-center">
+				<div class="col-md-8 col-lg-6">
+					<div class="form-container">
+
+						{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+						<div class="mb-3">
+							{{ form_label(form.text_reponse) }}
+							{{ form_widget(form.text_reponse, {
+                            'attr': {
+                                'class': 'form-control',
+                                'style': 'background-color:rgba(255, 255, 255, 0.9); color: black;'
+                        }})}}
+							{% for error in form.text_reponse.vars.errors %}
+								<div>{{ error.message }}</div>
+							{% endfor %}
+							<div class="mb-3">
+								{{ form_label(form.is_final) }}
+								{{ form_widget(form.is_final, {
+                            'attr': {
+                                'class': 'form-control',
+                                'style': 'background-color:rgba(255, 255, 255, 0.9);'
+                            }
+                        }) }}
+								{{ form_errors(form.is_final) }}
+							</div>
+
+							<div class="mb-3" style="display: none;">
+								{{ form_widget(form.Reclamation) }}
+							</div>
+
+							<div class="text-center">
+								{{ form_widget(form.Envoyer, {
+                            'attr': {
+                                'class': 'btn btn-primary',
+                                'style': 'background-color: #ff7b00; color: white; border: none; padding: 10px 30px;'
+                            }
+                        }) }}
+							</div>
+
+							{{ form_end(form) }}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Scripts -->
+			<script>
+				let lastScrollTop = 0;
+const header = document.getElementById('header');
+
+window.addEventListener('scroll', function () {
+const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+header.style.top = scrollTop > lastScrollTop ? "-100px" : "0";
+lastScrollTop = scrollTop;
+});
+
+// Auto-hide flash messages
+setTimeout(function () {
+const alerts = document.getElementsByClassName('alert-custom');
+for (let alert of alerts) {
+alert.style.opacity = '0';
+alert.style.transition = 'opacity 0.5s ease-out';
+setTimeout(() => alert.remove(), 500);
+}
+}, 3000);
+			</script>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+		</body>
+	</body>
+</html>

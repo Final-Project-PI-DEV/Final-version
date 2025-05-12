@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Archive des Réclamations</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<style>
+			body {
+				background: url('/assets/images/camping2.jpg') no-repeat center center fixed;
+				background-size: cover;
+				padding: 20px;
+				font-family: 'Poppins', sans-serif;
+			}
+			.btn-custom.btn-danger {
+				color: white;
+			}
+			.table-container {
+				background: rgba(255, 255, 255, 0.95);
+				padding: 30px;
+				border-radius: 15px;
+				margin-top: 30px;
+				box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+				width: 100vw;
+				max-width: none;
+				overflow-x: auto;
+			}
+			.table-responsive {
+				width: 110%;
+			}
+			.table {
+				margin-top: 20px;
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+			.table thead th {
+				background-color: #4a90e2;
+				color: white;
+				font-weight: 600;
+				text-transform: uppercase;
+				font-size: 0.9em;
+				padding: 15px;
+				vertical-align: middle;
+			}
+			.table tbody td {
+				padding: 15px;
+				vertical-align: middle;
+			}
+			.table tbody tr:hover {
+				background-color: rgba(74, 144, 226, 0.05);
+			}
+			.status-resolue {
+				background-color: #4caf50 !important;
+				color: white !important;
+				border-radius: 20px;
+				padding: 8px 15px;
+				font-size: 0.9em;
+				border: none;
+			}
+			.btn-retour {
+				margin-bottom: 20px;
+			}
+			.btn-danger {
+				background-color: #f44336;
+			}
+		</style>
+	</head>
+	<body>
+		{% block body %}
+		{{include('reclamation/index2.html.twig')}}
+			<div class="container table-container">
+				<a href="{{ path('app_list') }}" class="btn btn-primary btn-retour">
+					<i class="fas fa-arrow-left"></i>
+					Retour à la liste
+				</a>
+				<h2 class="text-center page-title">
+					<i class="fas fa-archive me-2"></i>Archive des Réclamations
+				</h2>
+
+				<!-- Formulaire de recherche par date -->
+				<form action="{{ path('app_archive') }}" method="get" class="mb-4">
+					<div class="input-group">
+						<input type="date" name="searchDate" class="form-control" placeholder="Rechercher par date">
+						<button type="submit" class="btn btn-primary">
+							<i class="fas fa-search"></i>
+							Rechercher
+						</button>
+					</div>
+				</form>
+
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>
+									<i class="fas fa-heading me-2"></i>Titre</th>
+								<th>
+									<i class="fas fa-tag me-2"></i>Objet</th>
+								<th>
+									<i class="fas fa-calendar-alt me-2"></i>Date</th>
+								<th>
+									<i class="fas fa-align-left me-2"></i>Description</th>
+								<th>
+									<i class="fas fa-reply me-2"></i>Réponse</th>
+								<th>
+									<i class="fas fa-info-circle me-2"></i>Statut</th>
+								<th>
+									<i class="fas fa-user me-2"></i>User ID</th>
+								<th class="actions-column">
+									<i class="fas fa-cogs me-2"></i>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for reclamation in reclamations %}
+								<tr>
+									<td class="title-cell" title="{{ reclamation.title }}">{{ reclamation.title }}</td>
+									<td>{{ reclamation.objet }}</td>
+									<td>{{ reclamation.dateReclamation|date('d/m/Y H:i') }}</td>
+									<td class="description-cell" title="{{ reclamation.description }}">{{ reclamation.description }}
+									</td>
+									<td>
+										{% if reclamation.reponse %}
+											<div class="response-content">
+												{{ reclamation.reponse.textReponse }}
+												<br>
+												<small class="text-muted">
+													<i class="far fa-clock me-1"></i>
+													Répondu le
+													{{ reclamation.reponse.dateReponse|date('d/m/Y H:i') }}
+												</small>
+											</div>
+										{% else %}
+											<span class="text-muted">
+												<i class="fas fa-hourglass-half me-1"></i>
+												Pas encore de réponse
+											</span>
+										{% endif %}
+									</td>
+									<td>
+										<span class="badge {% if reclamation.statut == 'en attente' %}status-attente{% elseif reclamation.statut == 'résolue' %}status-resolue{% else %}status-encours{% endif %}">
+											{{ reclamation.statut }}
+										</span>
+									</td>
+									<td>{{ reclamation.user.id }}</td>
+									<td>
+										<a href="{{ path('delete_reclamation', {'id': reclamation.id}) }}" class="btn-custom btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?')">
+											<i class="fas fa-trash-alt ms-2"></i>
+											Supprimer
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{% endblock %}
+	</body>
+</html>

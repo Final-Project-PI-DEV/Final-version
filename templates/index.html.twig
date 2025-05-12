@@ -1,0 +1,324 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}home{% endblock %}
+
+{% block body %}
+<style>
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    background: #2d2d2d; /* Fond sombre pour contraster avec le texte blanc */
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.container-fluid {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    left: 20px; /* Logo à gauche */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+.logo-img {
+    max-height: 100px;
+    transition: transform 0.3s;
+}
+
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
+.navmenu {
+    width: 100%; /* Prend toute la largeur disponible */
+    display: flex;
+    justify-content: center; /* Centrage horizontal du menu */
+}
+
+.navmenu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center; /* Centrage des éléments <li> */
+}
+
+.navmenu a {
+    color: white !important; /* Texte blanc */
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    padding: 5px 0;
+    position: relative;
+}
+
+.navmenu a:hover,
+.navmenu a:active {
+    color: white !important; /* Texte blanc au survol et au clic */
+    opacity: 0.8; /* Légère transparence pour l'effet de survol */
+}
+
+/* Dropdown styles */
+.dropdown {
+    position: relative;
+}
+
+.dropdown > ul {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2d2d2d; /* Fond sombre pour les sous-menus */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    min-width: 200px;
+    padding: 1rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+.dropdown:hover > ul {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown ul li {
+    padding: 0.5rem 1.5rem;
+    text-align: center;
+}
+
+.dropdown ul a {
+    color: white !important; /* Texte blanc dans les sous-menus */
+    font-size: 0.9em;
+}
+
+.dropdown ul a:hover {
+    color: white !important; /* Texte blanc au survol dans les sous-menus */
+    opacity: 0.8; /* Légère transparence pour l'effet de survol */
+    padding-left: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .navmenu ul {
+        flex-direction: column;
+        gap: 0;
+        text-align: left;
+        padding: 20px;
+        background: #3d3d3d; /* Fond légèrement plus clair pour les sous-menus en mobile */
+    }
+    
+    .dropdown > ul {
+        position: static;
+        box-shadow: none;
+        padding-left: 1rem;
+    }
+    
+    .mobile-nav-toggle {
+        display: block;
+        color: white; /* Icône blanche pour le toggle mobile */
+    }
+}
+</style>
+
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl">
+        <a href="{{ path('sign-in') }}" class="logo">
+            <img src="{{ asset('assets/images/logorz1.png') }}" class="logo-img">
+        </a>
+        <nav id="navmenu" class="navmenu">
+            <ul>
+                <li><a href="{{path('home11')}}">Accueil</a></li>
+                
+                <!-- Événements -->
+                <li class="dropdown">
+                    <a href="#"><span>Événements</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li><a href="{{path('app_yassine_index')}}">Événements</a></li>
+                        <li><a href="{{path('app_reserved_events')}}">Historique</a></li>
+                    </ul>
+                </li>
+
+                <!-- Réservations -->
+                <li class="dropdown">
+                    <a href="#"><span>Réservations</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li><a href="{{path('client')}}">Matériels</a></li>
+                        <li><a href="{{path('clientL')}}">Loisirs</a></li>
+                        <li><a href="{{path('app_restaurant_front')}}">Restaurants</a></li>
+                    </ul>
+                </li>
+
+                <!-- Communauté -->
+                <li class="dropdown">
+                    <a href="#"><span>Communauté</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li><a href="{{path('app_listPostA')}}">Blogs</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="{{path('user-liste')}}">Réclamations</a></li>
+                <li><a href="{{path('create-reclamation')}}">Contact</a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+    </div>
+</header>
+{% endblock %}
+Azza
+Azza Turky
+{% extends 'base.html.twig' %}
+
+{% block title %}home{% endblock %}
+
+
+{% block body %}
+<style>
+.footer {
+  position: relative;
+  overflow: hidden;
+  padding: 50px 0;
+  background: #2d2d2d;
+  color: white;
+}
+
+.footer__parralax {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.footer__parralax-trees { /* Styles spécifiques pour l'animation parallax */ }
+.footer__parralax-moto { /* Styles spécifiques pour l'animation parallax */ }
+.footer__parralax-secondplan { /* Styles spécifiques pour l'animation parallax */ }
+.footer__parralax-premierplan { /* Styles spécifiques pour l'animation parallax */ }
+.footer__parralax-voiture { /* Styles spécifiques pour l'animation parallax */ }
+
+.footer__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.footer__col-title {
+  color: #FF883B;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+
+.footer__socials {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.social-icon {
+  color: #fff;
+  font-size: 24px;
+  transition: color 0.3s;
+}
+
+.social-icon:hover {
+  color: #FF883B;
+}
+
+.footer__nav-list {
+  list-style: none;
+  padding: 0;
+}
+
+.footer__nav-link {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer__nav-link:hover {
+  color: #FF883B;
+}
+
+.footer__copyrights {
+  margin-top: 50px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Styles pour les animations parallax */
+@media (max-width: 768px) {
+  .footer__columns {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+<footer class="footer">
+  <div class="footer__parralax">
+    <div class="footer__parralax-trees"></div>
+    <div class="footer__parralax-moto"></div>
+    <div class="footer__parralax-secondplan"></div>
+    <div class="footer__parralax-premierplan"></div>
+    <div class="footer__parralax-voiture"></div>
+  </div>
+  <div class="container">
+    <div class="footer__columns">
+      <div class="footer__col">
+        <h3 class="footer__col-title">Réseaux sociaux</h3>
+        <div class="footer__socials">
+          <a href="https://www.facebook.com/profile.php?id=61572387456427" target="_blank" class="social-icon">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/rahalla.tn/?hl=ar" target="_blank" class="social-icon">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" target="_blank" class="social-icon">
+            <i class="fab fa-youtube"></i>
+          </a>
+          <a href="https://www.linkedin.com" target="_blank" class="social-icon">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h3 class="footer__col-title">Liens utiles</h3>
+        <nav class="footer__nav">
+          <ul class="footer__nav-list">
+            <li class="footer__nav-item">
+              <a href="" class="footer__nav-link"><span>À propos de Rahalla</span></a>
+            </li>
+            <li class="footer__nav-item">
+              <a href="" class="footer__nav-link"><span>Expérience</span></a>
+            </li>
+            <li class="footer__nav-item">
+              <a href="" class="footer__nav-link"><span>Média</span></a>
+            </li>
+            <li class="footer__nav-item">
+              <a href="" class="footer__nav-link"><span>Contact</span></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__col">
+        <h3 class="footer__col-title">Informations</h3>
+        <a href="" class="footer__nav-link"><span> +216 25 885 881</span></a>
+        <a href="" class="footer__nav-link"><span>contact@rahalla.tn</span></a>
+      </div>
+    </div>
+    <div class="footer__copyrights">
+      <p style="color:white;">© 2025 Rahalla.tn. Powered by CAMPFIRE CREW</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}

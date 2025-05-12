@@ -1,0 +1,233 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Loisirs disponibles{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block body %}
+    <style>
+        :root {
+            --primary-color: #FF883B;
+            --hover-color: rgb(202, 83, 4);
+            --background-color: #f8f9fa;
+            --card-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--background-color);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container-xl {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+            color: white;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-transform: capitalize;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .search-group {
+            max-width: 500px;
+            margin: 1.5rem auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+
+        .cards-wrapper {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 4rem;
+            margin: 0 auto;
+            max-width: 1400px;
+        }
+
+        .material-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .material-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .material-card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .badge-availability {
+            background: #e8f4ff;
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0.5rem 0;
+        }
+
+        .btn-custom {
+            background: var(--primary-color);
+            color: white !important;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-custom:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .no-items {
+            text-align: center;
+            padding: 4rem 0;
+            color: #6c757d;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+    </style>
+    {{include('reclamation/index1.html.twig')}}
+    <div class="container-xl">
+        <div class="header-section">
+            <h1 class="h3 mb-0">🎉 Loisirs disponibles</h1>
+            <div class="d-flex gap-3 align-items-center">
+                <div class="search-group">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="search" 
+                        class="search-input" 
+                        placeholder="Rechercher un loisir..."
+                        name="searchbar"
+                        aria-label="Recherche de loisirs"
+                    >
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_loisir_new') }}" class="btn-custom">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Nouveau 
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% if loisirs is empty %}
+            <div class="no-items">
+                <h2 class="h4 mb-3">Aucun loisir disponible</h2>
+                <p>Commencez par ajouter un nouveau loisir</p>
+            </div>
+        {% else %}
+            <div class="cards-wrapper">
+                {% for loisir in loisirs %}
+                    <div class="material-card">
+                       <img 
+                            src="{{ loisir.Path ? asset('uploads/images/' ~ loisir.Path) : asset('images/default-loisir.jpg') }}" 
+                            class="card-image" 
+                            alt="{{ loisir.name }}"
+                            loading="lazy"
+                        >
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="badge-availability">
+                                    {{ loisir.quantityAvailable }}/{{ loisir.quantity }} disponibles
+                                </span>
+                                <span class="text-muted small">{{ loisir.type }}</span>
+                            </div>
+                            <h3 class="h5 mb-2">{{ loisir.name }}</h3>
+                            <p class="text-muted small mb-3">
+                                {{ loisir.description ? loisir.description|slice(0, 80) ~ '...' : 'Aucune description' }}
+                            </p>
+                            <div class="price-tag">{{ loisir.price|number_format(2, ',', ' ') }} TND</div>
+                            <div class="d-flex gap-2 mt-3">
+                                <a 
+                                    href="{{ path('app_loisir_show', {'id': loisir.id}) }}" 
+                                    class="btn-custom"
+                                >
+                                    Détails
+                                </a>
+                                <a 
+                                    href="{{ path('app_loisir_edit', {'id': loisir.id}) }}" 
+                                    class="btn-custom"
+                                >
+                                    Modifier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

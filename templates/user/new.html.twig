@@ -1,0 +1,305 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block body %}
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container d-flex justify-content-center align-items-center">
+        <a href="{{ path('sign-in') }}" class="logo d-flex align-items-center me-auto me-lg-0">
+            <img src="{{ asset('assets/images/logorz1.png') }}" class="logo-img">
+        </a>
+        <nav id="navmenu" class="navmenu d-flex align-items-center">
+            <ul class="d-flex align-items-center">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="{{ path('link1') }}">About</a></li>
+                <li><a href="{{ path('link2') }}">Services</a></li>
+                <li><a href="{{ path('link3') }}">Portfolio</a></li>
+                <li><a href="#">Team</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+        <a class="btn-getstarted" href="{{ path('sign-in') }}">Get Started</a>
+    </div>
+</header>
+
+
+    <style>
+   
+    
+        input[type="file"] {
+            display: none; /* Cache le bouton de téléchargement natif */
+        }
+        
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border 0.3s ease;
+            width: 100%; /* Largeur complète pour les champs */
+            box-sizing: border-box; /* Inclure padding et border dans la largeur */
+            background-color: rgba(255, 255, 255, 0.8); /* Fond légèrement transparent pour les champs */
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        .vh-100 {
+            height: 100vh;
+        }
+        
+        .d-flex {
+            display: flex;
+        }
+        
+        .justify-content-center {
+            justify-content: center;
+        }
+        
+        .align-items-center {
+            align-items: center;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+         body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            background-image: url('{{ asset('assets/images/campnow.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .logo {
+            max-width: 100px;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.7); /* Fond sombre transparent */
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            color: white; /* Couleur du texte pour qu'il soit lisible sur fond sombre */
+            margin-top: 50px; /* Ajouter un espace entre la navbar et le formulaire */
+        }
+        
+        #navmenu {
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+            align-items: center; /* Centrer verticalement */
+            width: 100%; /* Prendre toute la largeur disponible */
+        }
+        
+        #navmenu ul {
+            display: flex;
+            justify-content: center; /* Centrer les éléments horizontalement */
+            align-items: center; /* Centrer les éléments verticalement */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        #navmenu ul li {
+            margin: 0 20px; /* Ajustez cette valeur pour augmenter ou diminuer l'espace */
+        }
+        
+        #navmenu ul li a {
+            color: white; /* Couleur du texte */
+            text-decoration: none; /* Supprimer le soulignement des liens */
+            font-weight: bold; /* Texte en gras */
+            transition: color 0.3s ease; /* Transition pour l'effet de survol */
+        }
+        
+        #navmenu ul li a:hover {
+            color: #007bff; /* Changement de couleur au survol */
+        }
+        
+        .form-outline {
+            margin-bottom: 1rem;
+            text-align: center; /* Centrer le texte */
+        }
+        
+        .form-check {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        
+        label {
+            color: white; /* Texte blanc pour les labels */
+            font-weight: bold;
+            margin-bottom: 30px; /* Ajout d'un espace sous le label */
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px; /* Ajout d'un espace sous le champ */
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-upload button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .file-upload button:hover {
+            background-color: #0056b3;
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .profile-image {
+            display: block;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 3px solid #007bff;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button:active {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gender-label {
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+            color: white; /* Texte blanc pour le label "Gender" */
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-select {
+            width: 30%;
+            margin-right: 10px;
+            background-color: rgba(255, 255, 255, 0.8); /* Fond légèrement transparent pour le select */
+        }
+        
+        .form-outline input, .form-outline select {
+            width: 70%;
+        }
+        
+        .form-check-label {
+            color: white; /* Texte blanc pour les labels des boutons radio */
+        }
+        
+    </style>
+
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4" style="width: 400px;">
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+
+            <div class="form-outline">
+                {{ form_row(form.nom, {'attr': {'class': 'text-center'}}) }}
+            </div>
+
+            <div class="form-outline">
+                {{ form_row(form.prenom, {'attr': {'class': 'text-center'}}) }}
+            </div>
+
+            <div class="form-outline">
+                <label class="form-check-label gender-label">Telephone:</label>
+                <div class="input-group">
+                    <select class="form-select" id="countryCode" name="country_code" required>
+                        <option value="+216">+216 (Tunisia)</option>
+                        <option value="+33">+33 (France)</option>
+                        <option value="+1">+1 (USA)</option>
+                    </select>
+                    {{ form_widget(form.telephone) }}
+                </div>
+            </div>
+
+            <div class="form-outline">
+                {{ form_row(form.email, {'attr': {'class': 'text-center'}}) }}
+            </div>
+
+            <div class="form-outline">
+                {{ form_row(form.password, {'attr': {'class': 'text-center'}}) }}
+            </div>
+
+            <div class="form-outline">
+                {{ form_row(form.date_de_naissance, {'attr': {'class': 'text-center'}}) }}
+            </div>
+
+            <div class="form-outline">
+                <div class="file-upload">
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('{{ form.image.vars.id }}').click()">Choisir une image</button>
+                    {{ form_widget(form.image, {'attr': {'onchange': 'previewImage(event)', 'class': 'file-input', 'id': form.image.vars.id}}) }}
+                </div>
+            </div>
+            <img id="profilePreview" class="profile-image" src="#" alt="Aperçu de l'image de profil" style="display: none;"/>
+
+            <label class="form-check-label gender-label">Gender:</label>
+            <div class="form-outline mb-3">
+                <div class="form-check">
+                    {{ form_widget(form.is_man[0], {'attr': {'class': 'form-check-input'}}) }}
+                    <label class="form-check-label" for="{{ form.is_man[0].vars.id }}">Homme</label>
+                </div>
+                <div class="form-check">
+                    {{ form_widget(form.is_man[1], {'attr': {'class': 'form-check-input'}}) }}
+                    <label class="form-check-label" for="{{ form.is_man[1].vars.id }}">Femme</label>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Sign Up</button>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function previewImage(event) {
+            var output = document.getElementById('profilePreview');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.style.display = 'block';
+        }
+    </script>
+{% endblock %}

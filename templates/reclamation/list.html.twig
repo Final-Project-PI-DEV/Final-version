@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Liste des Réclamations</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<style>
+			body {
+				background: url('/assets/images/camping2.jpg') no-repeat center center fixed;
+				background-size: cover;
+				padding: 20px;
+				font-family: 'Poppins', sans-serif;
+			}
+			.table-container {
+				background: rgba(255, 255, 255, 0.95);
+				padding: 30px;
+				border-radius: 15px;
+				margin-top: 30px;
+				box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+				width: 100vw; /* Prend toute la largeur de l'écran */
+				max-width: none; /* Supprime toute limitation de largeur */
+				overflow-x: auto; /* Permet de faire défiler horizontalement si nécessaire */
+			}
+			.table-responsive {
+				width: 110%; /* Table agrandie */
+			}
+			.table {
+				margin-top: 20px;
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+			.table thead th {
+				background-color: #4a90e2;
+				color: white;
+				font-weight: 600;
+				text-transform: uppercase;
+				font-size: 0.9em;
+				padding: 15px;
+				vertical-align: middle;
+			}
+			.table tbody td {
+				padding: 15px;
+				vertical-align: middle;
+			}
+			.table tbody tr:hover {
+				background-color: rgba(74, 144, 226, 0.05);
+			}
+			.alert {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				z-index: 1000;
+				animation: slideIn 0.5s ease-out;
+				min-width: 300px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			}
+
+			@keyframes slideIn {
+				from {
+					transform: translateX(100%);
+					opacity: 0;
+				}
+				to {
+					transform: translateX(0);
+					opacity: 1;
+				}
+			}
+
+			.status-encours,
+			.status-resolue,
+			.status-attente {
+				border-radius: 20px;
+				padding: 8px 15px;
+				font-size: 0.9em;
+				border: none;
+			}
+
+			.status-encours {
+				background-color: #ffd54f !important;
+				color: #000 !important;
+			}
+
+			.status-resolue {
+				background-color: #4caf50 !important;
+				color: white !important;
+			}
+
+			.status-attente {
+				background-color: #f44336 !important;
+				color: white !important;
+			}
+
+			.btn-custom {
+				margin: 5px; /* Réduit l'espacement entre les boutons */
+				padding: 5px 10px; /* Réduit l'espace autour du texte */
+				font-size: 0.70em; /* Réduit la taille du texte */
+				border-radius: 25px; /* Réduit l'arrondi des boutons tout en conservant la forme arrondie */
+				color: white;
+				border: none;
+				cursor: pointer;
+			}
+			.btn-success {
+				background-color: #4caf50;
+			}
+			.btn-danger {
+				background-color: #f44336;
+			}
+			.modal-content {
+				border-radius: 15px;
+				box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+			}
+			.modal-header {
+				background-color: #4a90e2;
+				color: white;
+				border-radius: 15px 15px 0 0;
+				padding: 20px;
+			}
+			.modal-footer {
+				background-color: #f8f9fa;
+				border-radius: 0 0 15px 15px;
+				padding: 20px;
+			}
+			.form-control {
+				border-radius: 10px;
+				padding: 12px;
+				border: 1px solid #ddd;
+			}
+			.form-select {
+				border-radius: 20px;
+				padding: 8px 15px;
+				border: 1px solid #ddd;
+				cursor: pointer;
+				width: 100%; /* Remplir toute la largeur */
+			}
+			.text-muted {
+				font-size: 0.85em;
+			}
+			.response-content {
+				max-width: 300px; /* Réduit la largeur du champ description */
+				word-wrap: break-word; /* Permet le passage à la ligne */
+				white-space: normal; /* Gère le texte sur plusieurs lignes */
+			}
+			.description-cell {
+				max-width: 300px; /* Réduit la largeur du champ description */
+				word-wrap: break-word; /* Permet le passage à la ligne */
+				white-space: normal; /* Gère le texte sur plusieurs lignes */
+			}
+			.title-cell {
+				max-width: 150px; /* Réduit la largeur du champ description */
+				word-wrap: break-word; /* Permet le passage à la ligne */
+				white-space: normal; /* Gère le texte sur plusieurs lignes */
+			}
+			.page-title {
+				color: #2c3e50;
+				font-weight: 600;
+				margin-bottom: 30px;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+			.actions-column {
+				width: 140px; /* Largeur réduite pour la colonne des actions */
+			}
+		</style>
+	</head>
+	<body>
+		{% block body %}
+			<div class="container table-container">
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<h2 class="text-center page-title">
+						<i class="fas fa-clipboard-list me-2"></i>Liste des Réclamations
+					</h2>
+					<div>
+						<a href="{{ path('app_admin_stats_avis') }}" class="btn btn-info">
+							<i class="fas fa-chart-bar"></i>
+							Statistiques des avis
+						</a>
+					</div>
+					<a href="{{ path('app_archive') }}" class="btn btn-info">
+						<i class="fas fa-archive"></i>
+						Voir les Archives
+					</a>
+				</div>
+
+				{% for message in app.flashes('success') %}
+					<div class="alert alert-success alert-dismissible fade show">
+						<i class="fas fa-check-circle me-2"></i>
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+
+				{% for message in app.flashes('error') %}
+					<div class="alert alert-danger">
+						{{ message }}
+					</div>
+				{% endfor %}
+
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>
+									<i class="fas fa-heading me-2"></i>Titre</th>
+								<th>
+									<i class="fas fa-tag me-2"></i>Objet</th>
+								<th>
+									<i class="fas fa-calendar-alt me-2"></i>Date</th>
+								<th>
+									<i class="fas fa-align-left me-2"></i>Description</th>
+								<th>
+									<i class="fas fa-reply me-2"></i>Réponse</th>
+								<th>
+									<i class="fas fa-info-circle me-2"></i>Statut</th>
+								<th>
+									<i class="fas fa-user me-2"></i>User ID</th>
+								<th>
+									<i class="fas fa-comments me-2"></i>Conversation</th>
+								<th class="actions-column">
+									<i class="fas fa-cogs me-2"></i>Actions</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for reclamation in reclamations %}
+								<tr>
+									<td class="title-cell" title="{{ reclamation.title }}">{{ reclamation.title }}</td>
+									<td>{{ reclamation.objet }}</td>
+									<td>{{ reclamation.dateReclamation|date('d/m/Y H:i') }}</td>
+									<td class="description-cell" title="{{ reclamation.description }}">{{ reclamation.description }}
+									</td>
+									<td>
+										{% if reclamation.reponse %}
+											<div class="response-content">
+												{{ reclamation.reponse.textReponse }}
+												<br>
+												<small class="text-muted">
+													<i class="far fa-clock me-1"></i>
+													Répondu le
+													{{ reclamation.reponse.dateReponse|date('d/m/Y H:i') }}
+												</small>
+											</div>
+										{% else %}
+											<span class="text-muted">
+												<i class="fas fa-hourglass-half me-1"></i>
+												Pas encore de réponse
+											</span>
+										{% endif %}
+									</td>
+									<td>
+										<form action="{{ path('change_statut', {'id': reclamation.id}) }}" method="POST">
+											<select name="statut" class="form-select {% if reclamation.statut == 'en attente' %}status-attente{% elseif reclamation.statut == 'résolue' %}status-resolue{% else %}status-encours{% endif %}" onchange="this.form.submit()">
+												<option value="En cours" {% if reclamation.statut == 'En cours' %} selected {% endif %}>
+													En cours
+												</option>
+												<option value="en attente" {% if reclamation.statut == 'en attente' %} selected {% endif %}>
+													En attente
+												</option>
+												<option value="résolue" {% if reclamation.statut == 'résolue' %} selected {% endif %}>
+													Résolue
+												</option>
+											</select>
+										</form>
+									</td>
+									<td>{{ reclamation.user.id }}</td>
+									<td>
+										{% if reclamation.statut == 'en attente' %}
+											<a href="{{ path('conversation', {'id': reclamation.id}) }}" class="btn btn-info">
+												<i class="fas fa-comments"></i>
+												Ouvrir Conversation
+											</a>
+										{% endif %}
+									</td>
+									<td>
+										{% if reclamation.statut == 'Résolue' %}
+											{% set hasAvis = false %}
+											{% for avis in reclamation.avisClients %}
+												{% set hasAvis = true %}
+											{% endfor %}
+
+											{% if not hasAvis %}
+												<a href="{{ path('app_avis_client', {'id': reclamation.id}) }}" class="btn btn-custom btn-success">
+													<i class="fas fa-comment"></i>
+													Donner mon avis
+												</a>
+											{% endif %}
+										{% endif %}
+										<a href="{{ path('create-reponse', {'id': reclamation.id}) }}" class="btn-custom btn-success">
+											<i class="fas fa-reply ms-2"></i>
+											Répondre
+										</a>
+										<a href="{{ path('delete_reclamation', {'id': reclamation.id}) }}" class="btn-custom btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?')">
+											<i class="fas fa-trash-alt ms-2"></i>
+											Supprimer
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+			<script>
+				// Auto-hide alerts after 3 seconds
+setTimeout(function () {
+document.querySelectorAll('.alert').forEach(alert => {
+alert.style.opacity = '0';
+alert.style.transition = 'opacity 0.5s ease-out';
+setTimeout(() => alert.remove(), 500);
+});
+}, 3000);
+			</script>
+		{% endblock %}
+	</body>
+</html>

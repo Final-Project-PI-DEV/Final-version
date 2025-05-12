@@ -1,0 +1,18 @@
+/* Custom Styles */
+.hero-section {
+    background-color: #f8f9fa;
+    padding: 100px 0;
+}
+
+.services-section .card {
+    margin-bottom: 20px;
+}
+
+.interior-section {
+    padding: 100px 0;
+}
+
+.newsletter-section {
+    background-color: #f8f9fa;
+    padding: 100px 0;
+}

@@ -1,0 +1,132 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    margin: 0;
+    padding: 1rem;  /* Réduction de l'espace pour un formulaire plus compact */
+}
+
+.form-card {
+    width: 100%;
+    max-width: 600px;  /* Réduit la largeur du formulaire */
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.form-header {
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    padding: 1.2rem 2rem;
+    border-radius: 15px 15px 0 0;
+}
+
+.form-header h1 {
+    color: white;
+    margin: 0;
+    font-size: 1.5rem;  /* Taille du titre réduite */
+    font-weight: 600;
+}
+
+.form-body {
+    padding: 2rem;
+}
+
+/* Améliorations des champs formulaire */
+.form-group label {
+    font-weight: 500;
+    color: #2d6a4f;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    font-size: 0.9rem;  /* Taille de police réduite */
+}
+
+.form-control:focus {
+    border-color: #40916c;
+    box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.2);
+    background: white;
+}
+
+/* Style des boutons */
+.back-link {
+    color: #6c757d;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-link:hover {
+    color: #2d6a4f;
+    transform: translateX(-3px);
+}
+
+.btn-submit {
+    background: #40916c;
+    color: white;
+    padding: 0.5rem 1.5rem;  /* Réduit la taille du bouton */
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;  /* Taille du texte réduite */
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: #2d6a4f;
+    transform: translateY(-2px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    
+    .form-header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .form-body {
+        padding: 1.5rem;
+    }
+
+    .form-card {
+        max-width: 90%;
+    }
+}
+
+/* Animation des erreurs */
+.form-errors {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

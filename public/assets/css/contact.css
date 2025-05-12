@@ -1,0 +1,208 @@
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: url('/assets/images/camping22.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.logo img {
+  width: 120px;
+  height: auto;
+}
+
+.contact {
+  max-width: 800px;
+  margin-top : 200px auto;
+  padding: 80px;
+  background: transparent;
+  border-radius: 8px;
+  
+}
+h2 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #f46f09;
+}
+h4 {
+font-size: 48px;
+font-weight: bold;
+color: #64beba;
+}
+h1 {
+  font-size: 48px;
+  font-weight: bold;
+  color: #f46f09;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #7d4b4b;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #7d4b4b;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #00ff0d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #FF883B;
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.faq-item {
+  margin-top: 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
+
+.faq-item h3 {
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.faq-item p {
+  display: none;
+  margin-top: 5px;
+  color: #fff;
+  text-align: left;
+}
+
+.faq-item p.show {
+  display: block;
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+}
+footer p {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.input-group select {
+  margin-bottom: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+label {
+  color: #fff;
+  margin-bottom: 5px;
+  font-size: 16px;
+  display: block;
+}
+.form-errors {
+  color: white; 
+  font-size: 17px; 
+}
+* Header Styles */
+.header {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+background-color: rgba(51, 51, 51, 0.7);
+z-index: 1000;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+padding: 15px 0;
+transition: top 0.3s;
+}
+.header.scrolled {
+background-color: rgba(51, 51, 51, 0.9);
+}
+.header.hide {
+transform: translateY(-100%); 
+}
+.container-fluid {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 20px;
+}
+
+.logo-img {
+height: 50px;
+width: auto;
+}
+html {
+scroll-behavior: smooth;
+}
+
+/* Navbar Menu Styles */
+.navmenu ul {
+list-style: none;
+display: flex;
+gap: 30px;
+}
+
+.navmenu ul li a {
+color: rgba(255, 255, 255, 0.588);
+text-decoration: none;
+font-size: 16px;
+padding: 10px 20px;
+transition: background-color 0.3s ease;
+}
+
+.navmenu ul li a:hover,
+.navmenu ul li a.active {
+background-color: #FF883B;
+border-radius: 5px;
+}
+
+/* Get Started Button */
+.btn-getstarted {
+background-color: #FF883B;
+color: white;
+padding: 10px 30px;
+border-radius: 30px;
+text-decoration: none;
+font-weight: bold;
+transition: background-color 0.3s ease;
+}
+
+.btn-getstarted:hover {
+background-color: #FF883B;
+}
+
+

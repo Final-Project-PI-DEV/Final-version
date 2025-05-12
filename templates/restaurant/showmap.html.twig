@@ -1,0 +1,50 @@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const map = L.map('map').setView([36.8065, 10.1815], 12); // Centre sur Tunis
+
+        // Ajouter une couche OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Récupération des restaurants depuis Symfony (pas besoin de JSON.parse)
+        const restaurants = {{ restaurants|json_encode|raw }};
+        console.log("Restaurants reçus :", restaurants); // Debug
+
+        function geocodeAddress(restaurant, index) {
+            const address = restaurant.adresse;
+            if (!address) {
+                console.error("Adresse vide pour le restaurant :", restaurant);
+                return;
+            }
+
+            // API Nominatim avec User-Agent
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+
+            fetch(url, {
+                headers: { 'User-Agent': 'MyRestaurantApp/1.0 (contact@example.com)' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+
+                    console.log(`Adresse trouvée : ${address} -> Lat: ${lat}, Lon: ${lon}`);
+
+                    // Ajouter un marqueur sur la carte
+                    const marker = L.marker([lat, lon]).addTo(map)
+                        .bindPopup(`<h3>${restaurant.nomResto}</h3><p>${restaurant.adresse}</p>`);
+                } else {
+                    console.error("Adresse non trouvée :", address);
+                }
+            })
+            .catch(error => console.error("Erreur de géocodage :", error));
+        }
+
+        // Lancer le géocodage avec 2 secondes d'intervalle
+        restaurants.forEach((restaurant, index) => {
+            setTimeout(() => geocodeAddress(restaurant, index), index * 2000);
+        });
+    });
+</script>

@@ -1,0 +1,100 @@
+{% block footer %}
+<footer class="footer mt-5" id="footer">
+    <div class="container pt-5">
+        <div class="row g-4 justify-content-center"> <!-- Centrer le contenu -->
+            <!-- À propos -->
+            <div class="col-md-6 col-lg-4 text-center" style="margin-left: 15px;"> <!-- Déplacement à droite -->
+                <h4 class="text-white mb-4">Festivus</h4>
+                <p class="footer-text">Découvrez les événements les plus captivants. Rejoignez-nous et ne manquez plus jamais une aventure passionnante.</p>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-md-6 col-lg-4 text-center" style="margin-left: 15px;"> <!-- Déplacement à droite -->
+                <h5 class="text-white mb-4">Contact</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2 footer-text">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        123 Rue des Événements, Tunis
+                    </li>
+                    <li class="mb-2 footer-text">
+                        <i class="fas fa-phone me-2"></i>
+                        +216 12 345 678
+                    </li>
+                    <li class="mb-2 footer-text">
+                        <i class="fas fa-envelope me-2"></i>
+                        contact@festivus.tn
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Suivez-nous -->
+            <div class="col-md-6 col-lg-4 text-center"> <!-- Texte centré -->
+                <h5 class="text-white mb-4">Suivez-nous</h5>
+                <div class="d-flex justify-content-center gap-3 social-buttons"> <!-- Centrer les icônes -->
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top mt-5 pt-4">
+            <p class="text-center footer-text mb-0">
+                © 2024 Festivus. Tous droits réservés.
+            </p>
+        </div>
+    </div>
+</footer>
+
+<!-- Styles du Footer -->
+<style>
+.footer {
+    background: #1a1e2b;
+    color: white;
+    padding: 20px 0;
+    transition: transform 0.2s ease; /* Transition pour un agrandissement léger */
+    transform-origin: top; /* Agrandissement vers le haut */
+}
+
+.footer-text {
+    color: white;
+    font-size: 14px;
+}
+
+.social-buttons {
+    transition: transform 0.3s ease;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2d3142;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.social-icon:hover {
+    background: #4CAF50;
+}
+</style>
+
+<!-- Script JavaScript -->
+<script>
+    window.addEventListener('scroll', function() {
+        const footer = document.getElementById('footer');
+        const scaleValue = 1 + (window.scrollY / 2000); // Agrandissement léger
+        footer.style.transform = `scale(${scaleValue}, 1)`; // Agrandissement uniquement vertical
+    });
+</script>
+{% endblock %}
